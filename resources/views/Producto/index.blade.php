@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-    Categoria
+    Producto
 @endsection
 
 @section('contenido')
@@ -10,10 +10,10 @@
         <div class="">
             <div class="">
                 <h2 class="">
-                    Listado de Categorías
+                    Listado de Productos
                 </h2>
-                <a href="{{ route('categoria.create') }}" class="">
-                    Nueva Categoría
+                <a href="{{ route('producto.create') }}" class="">
+                    Nuevo Producto
                 </a>
             </div>
 
@@ -24,10 +24,19 @@
                         ID
                     </th>
                     <th class="">
-                        Nombre Categoría
+                        Categoria
+                    </th>
+                    <th class="">
+                        Nombre Producto
                     </th>
                     <th class="">
                         Descripción
+                    </th>
+                    <th class="">
+                        Precio
+                    </th>
+                    <th class="">
+                        Stock
                     </th>
                     <th class="">
                         Acciones
@@ -37,15 +46,18 @@
 
             <tbody>
 
-                @foreach ($categoria as $categoria)
+                @foreach ($productos as $producto)
 
                 <tr>
-                    <td>{{ $categoria->id }}</td>
-                    <td>{{ $categoria->nombre_categoria }}</td>
-                    <td>{{ $categoria->descripcion_categoria }}</td>
+                    <td>{{ $producto->id }}</td>
+                    <td>{{ $producto->categoria->nombre_categoria }}</td>
+                    <td>{{ $producto->nombre_producto }}</td>
+                    <td>{{ $producto->descripcion_producto }}</td>
+                    <td>{{ $producto->precio }}</td>
+                    <td>{{ $producto->stock }}</td>
                     <td>
-                        <a href="{{ route('categoria.edit', $categoria->id) }}">Editar</a>
-                        <form action="{{ route('categoria.destroy', $categoria->id) }}" method="POST">
+                        <a href="{{ route('producto.edit', $producto->id) }}">Editar</a>
+                        <form action="{{ route('producto.destroy', $producto->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="">

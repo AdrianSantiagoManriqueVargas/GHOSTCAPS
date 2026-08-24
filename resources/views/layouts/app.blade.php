@@ -8,5 +8,14 @@
 </head>
 <body class="bg-gray-200">
     @yield('contenido')
+
+    @hasSection('volver')
+    <div class="">
+        <a href="/" 
+           class="">
+            @yield('volver')
+        </a>
+    </div>
+    @endif
 </body>
 </html>

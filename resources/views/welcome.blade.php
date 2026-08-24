@@ -12,6 +12,9 @@
                 <a href="{{ route('categoria.index') }}" class="">
                     Categoria
                 </a>
+                <a href="{{ route('producto.index') }}" class="">
+                    Producto
+                </a>
             </div>
         </div>
     </div>

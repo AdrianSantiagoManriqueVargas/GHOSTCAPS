@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('color_producto', function (Blueprint $table) {
             $table->id();
-            $table->string('url_imagen');
+            $table->string('color');
             $table->unsignedBigInteger('id_producto');
             $table->foreign('id_producto')->references('id')->on('producto');
             $table->timestamps();

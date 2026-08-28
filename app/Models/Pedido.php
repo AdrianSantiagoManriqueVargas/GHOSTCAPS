@@ -10,6 +10,7 @@ class Pedido extends Model
 
     protected $fillable = [
         'estado_pedido',
+        'mensaje_whatsapp',
         'costo_envio',
         'total',
         'subtotal',

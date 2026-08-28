@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pedido', function (Blueprint $table) {
             $table->id();
             $table->enum('estado_pedido', ['Pendiente', 'Entregado', 'Cancelado']);
+            $table->text('mensaje_whatsapp');
             $table->decimal('costo_envio', 10,2);
             $table->decimal('total', 10,2);
             $table->decimal('subtotal', 10,2);

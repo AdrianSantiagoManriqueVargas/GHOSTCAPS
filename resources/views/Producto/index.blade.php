@@ -33,10 +33,16 @@
                         Descripción
                     </th>
                     <th class="">
+                        Color
+                    </th>
+                    <th class="">
                         Precio
                     </th>
                     <th class="">
                         Stock
+                    </th>
+                    <th class="">
+                        Imagen
                     </th>
                     <th class="">
                         Acciones
@@ -53,8 +59,16 @@
                     <td>{{ $producto->categoria->nombre_categoria }}</td>
                     <td>{{ $producto->nombre_producto }}</td>
                     <td>{{ $producto->descripcion_producto }}</td>
+                    <td>{{ $producto->color }}</td>
                     <td>{{ $producto->precio }}</td>
                     <td>{{ $producto->stock }}</td>
+                    <td>
+                    @if ($producto->imagen_producto->isNotEmpty())
+                        <img src="{{ asset('storage/' . $producto->imagen_producto->first()->url_imagen) }}" width="50">
+                    @else
+                        Sin imagen
+                    @endif
+                    </td>
                     <td>
                         <a href="{{ route('producto.edit', $producto->id) }}">Editar</a>
                         <form action="{{ route('producto.destroy', $producto->id) }}" method="POST">

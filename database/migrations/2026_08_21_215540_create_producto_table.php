@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_producto');
             $table->string('descripcion_producto');
+            $table->string('color');
             $table->decimal('precio', 10,2);
             $table->integer('stock');
             $table->unsignedBigInteger('id_categoria');

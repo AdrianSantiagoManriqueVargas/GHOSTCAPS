@@ -12,7 +12,7 @@ class ProductoRepository{
 
     public function store(array $data)
     {
-        Producto::create($data);
+        return Producto::create($data);
     }
 
     public function show()

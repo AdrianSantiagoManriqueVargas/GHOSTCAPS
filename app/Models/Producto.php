@@ -11,6 +11,7 @@ class Producto extends Model
     protected $fillable = [
         'nombre_producto',
         'descripcion_producto',
+        'color',
         'precio',
         'stock',
         'id_categoria'
@@ -20,12 +21,8 @@ class Producto extends Model
         return $this->belongsTo(Categoria::class, 'id_categoria');
     }
 
-    public function color_producto(){
-        return $this->hasMany(ColorProducto::class);
-    }
-
     public function imagen_producto(){
-        return $this->hasMany(ImagenProducto::class);
+        return $this->hasMany(ImagenProducto::class, 'id_producto');
     }
 
     public function detalle_pedido(){

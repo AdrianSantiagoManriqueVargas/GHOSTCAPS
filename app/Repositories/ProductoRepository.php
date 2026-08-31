@@ -7,7 +7,7 @@ class ProductoRepository{
 
     public function index()
     {
-        return Producto::with('categoria')->get();
+        return Producto::with('categoria', 'imagen_producto')->get();
     }
 
     public function store(array $data)

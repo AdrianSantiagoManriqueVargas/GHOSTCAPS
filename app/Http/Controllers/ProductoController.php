@@ -41,9 +41,10 @@ class ProductoController extends Controller
         return redirect()->route('producto.index');
     }
 
-    public function show()
+    public function show(int $id)
     {
-        
+        $producto = $this->productoservice->edit($id);
+        return view('producto.producto', compact('producto'));
     }
 
     public function edit(int $id)

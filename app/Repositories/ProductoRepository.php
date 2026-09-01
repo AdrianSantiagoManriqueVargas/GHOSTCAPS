@@ -37,4 +37,9 @@ class ProductoRepository{
         Producto::destroy($id);
     }
 
+    public function buscarPorNombre(string $nombre, int $excluirId) // Método para buscar productos por nombre, excluyendo un ID específico
+    {
+        return Producto::where('nombre_producto', $nombre)->where('id', '!=', $excluirId)->get(); // El metodo where permite filtrar los productos por nombre y excluir el producto con el ID especificado (en este caso el mismo producto ya visto)
+    }
+
 }

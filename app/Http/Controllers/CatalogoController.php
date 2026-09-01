@@ -19,4 +19,11 @@ class CatalogoController extends Controller
         $productos = $this->productoservice->index();
         return view('catalogo.index', compact('productos'));
     }
+
+    public function show(int $id)
+    {
+        $producto = $this->productoservice->edit($id);
+        $variantesColor = $this->productoservice->variantesColor($producto);
+        return view('catalogo.producto', compact('producto', 'variantesColor'));
+    }
 }

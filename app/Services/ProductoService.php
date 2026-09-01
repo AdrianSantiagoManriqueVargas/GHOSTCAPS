@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use App\Models\Producto;
 use App\Repositories\ProductoRepository;
 
 class ProductoService{
@@ -56,5 +58,9 @@ class ProductoService{
         }
 
         $this->productorepository->destroy($id);
+    }
+
+    public function variantesColor(Producto $producto){
+        return $this->productorepository->buscarPorNombre($producto->nombre_producto, $producto->id);
     }
 }

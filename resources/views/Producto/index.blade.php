@@ -6,45 +6,45 @@
 
 @section('contenido')
 
-    <div class="container mx-auto mt-10">
-        <div class="bg-white shadow-lg rounded-lg p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold text-blue-800">
+    <div class="">
+        <div class="">
+            <div class="">
+                <h2 class="">
                     Listado de Productos
                 </h2>
-                <a href="{{ route('producto.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                <a href="{{ route('producto.create') }}" class="">
                     Nuevo Producto
                 </a>
             </div>
 
-        <table class="min-w-full border border-gray-300">
-            <thead class="bg-blue-200">
+        <table class="">
+            <thead class="">
                 <tr>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         ID
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Categoria
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Nombre Producto
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Descripción
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Color
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Precio
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Stock
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Imagen
                     </th>
-                    <th class="border px-4 py-2">
+                    <th class="">
                         Acciones
                     </th>
                 </tr>
@@ -54,27 +54,27 @@
 
                 @foreach ($productos as $producto)
 
-                <tr class="text-center  hover:bg-gray-50">
-                    <td class="border px-4 py-2">{{ $producto->id }}</td>
-                    <td class="border px-4 py-2">{{ $producto->categoria->nombre_categoria }}</td>
-                    <td class="border px-4 py-2">{{ $producto->nombre_producto }}</td>
-                    <td class="border px-4 py-2">{{ $producto->descripcion_producto }}</td>
-                    <td class="border px-4 py-2">{{ $producto->color }}</td>
-                    <td class="border px-4 py-2">{{ $producto->precio }}</td>
-                    <td class="border px-4 py-2">{{ $producto->stock }}</td>
-                    <td class="border px-4 py-2">
+                <tr class="">
+                    <td class="">{{ $producto->id }}</td>
+                    <td class="">{{ $producto->categoria->nombre_categoria }}</td>
+                    <td class="">{{ $producto->nombre_producto }}</td>
+                    <td class="">{{ $producto->descripcion_producto }}</td>
+                    <td class="">{{ $producto->color }}</td>
+                    <td class="">{{ $producto->precio }}</td>
+                    <td class="">{{ $producto->stock }}</td>
+                    <td class="">
                     @if ($producto->imagen_producto->isNotEmpty())
                         <img src="{{ asset('storage/' . $producto->imagen_producto->first()->url_imagen) }}" width="50">
                     @else
                         Sin imagen
                     @endif
                     </td>
-                    <td class="border px-4 py-2 flex justify-center">
-                        <a href="{{ route('producto.edit', $producto->id) }}" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded mr-8">Editar</a>
+                    <td class="">
+                        <a href="{{ route('producto.edit', $producto->id) }}" class="">Editar</a>
                         <form action="{{ route('producto.destroy', $producto->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded">
+                            <button type="submit" class="">
                                 Eliminar
                             </button>
                         </form>

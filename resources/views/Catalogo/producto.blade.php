@@ -42,12 +42,19 @@
             @endforeach
         </div>
 
+        <form action="{{ route('carrito.store', $producto->id) }}" method="POST">
+            @csrf
+            <button type="submit" class="">Agregar al carrito</button>
+        </form>
+
     </div>
 
 </div>
 
-    @section('volver')
-        Volver
-    @endsection
+    <div class="">
+        <a href="{{ route('catalogo.index') }}" class="">
+            Volver
+        </a>
+    </div>
 
 @endsection

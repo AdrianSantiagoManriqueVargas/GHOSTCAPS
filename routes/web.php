@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CatalogoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriaController;
@@ -24,3 +25,11 @@ Route::delete('imagenproducto/{id}', [ImagenProductoController::class, 'destroy'
 Route::get('catalogo', [CatalogoController::class, 'index'])->name('catalogo.index');
 
 Route::get('catalogo/producto/{id}', [CatalogoController::class, 'show'])->name('catalogo.producto');
+
+// CARRITO TEMPORAL
+
+Route::post('carrito/agregar/{producto}', [CarritoController::class, 'store'])->name('carrito.store');
+
+Route::get('carrito', [CarritoController::class, 'index'])->name('carrito.index');
+
+Route::delete('carrito/eliminar/{producto}', [CarritoController::class, 'destroy'])->name('carrito.destroy');

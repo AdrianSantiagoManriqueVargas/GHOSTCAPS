@@ -18,6 +18,8 @@
                 <a href="{{ route('catalogo.index') }}" class="">
                     Catalogo
                 </a>
+                <a href="{{ route('carrito.index') }}" class="">
+                    Carrito
             </div>
         </div>
     </div>

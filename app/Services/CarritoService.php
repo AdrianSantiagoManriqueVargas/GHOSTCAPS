@@ -27,8 +27,12 @@ class CarritoService{
         session(['carrito' => $carrito]);
     }
 
-    public function actualizar(){
-        
-    }
+    public function actualizar(int $idProducto, int $cantidad){
+        $carrito = session('carrito', []);
+        if(isset($carrito[$idProducto])){
+            $carrito[$idProducto] = $cantidad;
+        }
+        session(['carrito' => $carrito]);
+    }   
 
 }

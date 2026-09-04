@@ -32,7 +32,7 @@
             <div class="">
                 <p class="">
                     {{ $producto->categoria->nombre_categoria }}
-                </p>
+                </p>0
                 <h2 class="">
                     {{ $producto->nombre_producto }}
                 </h2>
@@ -46,6 +46,12 @@
             
         </div>
     @endforeach
+    </div>
+
+    <div class="">
+        <a href="{{ route('carrito.index') }}" class="">
+            Ir al carrito
+        </a>
     </div>
 
     @section('volver')

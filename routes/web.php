@@ -33,3 +33,5 @@ Route::post('carrito/agregar/{producto}', [CarritoController::class, 'store'])->
 Route::get('carrito', [CarritoController::class, 'index'])->name('carrito.index');
 
 Route::delete('carrito/eliminar/{producto}', [CarritoController::class, 'destroy'])->name('carrito.destroy');
+
+Route::put('carrito/actualizar/{producto}', [CarritoController::class, 'update'])->name('carrito.update');

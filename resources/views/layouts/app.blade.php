@@ -11,8 +11,7 @@
 
     @hasSection('volver')
     <div class="">
-        <a href="/" 
-           class="">
+        <a href="/" class="">
             @yield('volver')
         </a>
     </div>

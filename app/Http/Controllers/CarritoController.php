@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarritoUpdateRequest;
 use App\Services\CarritoService;
 use App\Services\ProductoService;
 use Illuminate\Http\Request;
@@ -27,11 +28,14 @@ class CarritoController extends Controller
             $producto = $this->productoservice->edit($idProducto);
             $items[] = [
                 'producto' => $producto,
-                'cantidad' => $cantidad
+                'cantidad' => $cantidad,
+                'subtotal' => $producto->precio * $cantidad
             ];
         }
 
-        return view('Carrito.index', compact('items'));
+        $total = array_sum(array_column($items, 'subtotal'));
+
+        return view('Carrito.index', compact('items', 'total'));
     }
 
     public function create()
@@ -55,9 +59,10 @@ class CarritoController extends Controller
         
     }
 
-    public function update(Request $request, string $id)
+    public function update(CarritoUpdateRequest $request, int $producto)
     {
-        
+        $this->carritoservice->actualizar($producto, $request->validated('cantidad'));
+        return back();
     }
 
     public function destroy(int $producto)

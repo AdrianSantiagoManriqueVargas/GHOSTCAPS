@@ -14,6 +14,6 @@ class ImagenProductoController extends Controller
 
     public function destroy(int $id){
         $this->imagenproductoservice->destroy($id);
-        return redirect()->route('producto.index');
+        return back();
     }
 }

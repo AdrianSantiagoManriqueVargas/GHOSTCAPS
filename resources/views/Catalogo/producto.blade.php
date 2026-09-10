@@ -6,7 +6,7 @@
 
 @section('contenido')
 
-<div class="">
+<div class="flex flex-col md:flex-row gap-4">
 
     <div class="">
         @if ($producto->imagen_producto->isNotEmpty())

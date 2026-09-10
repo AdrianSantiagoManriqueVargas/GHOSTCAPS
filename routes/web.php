@@ -10,7 +10,7 @@ use App\Models\Producto;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('inicio');
 
 // RUTAS PARA LA GESTION DE PRODUCTOS
 

@@ -28,4 +28,14 @@ class Producto extends Model
     public function detalle_pedido(){
         return $this->hasMany(DetallePedido::class);
     }
+
+    public function colorClases(): string{
+        return match($this->color) {
+            'Rojo' => 'bg-red-600 text-white',
+            'Negro' => 'bg-black text-white',
+            'Blanco' => 'bg-white text-black border border-gray-300',
+            'Azul' => 'bg-blue-600 text-white',
+            default => 'bg-gray-200 text-black',
+        };
+    }
 }

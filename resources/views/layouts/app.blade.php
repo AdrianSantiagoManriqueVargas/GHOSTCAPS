@@ -4,23 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo')</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Permanent+Marker&display=swap" rel="stylesheet">
-
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        marker: ['"Permanent Marker"', 'cursive'],
-                        sans: ['Montserrat', 'sans-serif'],
-                    },
-                },
-            },
-        };
-    </script>
 </head>
 <body class="bg-gray-200 flex flex-col min-h-screen">
 

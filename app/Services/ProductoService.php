@@ -25,10 +25,12 @@ class ProductoService{
 
         foreach ($imagenes as $imagen){
             $ruta = $imagen->store('productos', 'public');
+
             $this->imagenproductoservice->store([
                 'id_producto' => $producto->id,
                 'url_imagen' => $ruta,
             ]);
+
         }
     }
 
@@ -48,13 +50,17 @@ class ProductoService{
                 ]);
             }
         }
+
     }   
 
     public function destroy(int $id){
         $producto = $this->productorepository->edit($id);
 
+
+
         foreach ($producto->imagen_producto as $imagen) {
             $this->imagenproductoservice->destroy($imagen->id);
+        
         }
 
         $this->productorepository->destroy($id);

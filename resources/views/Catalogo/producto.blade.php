@@ -6,11 +6,11 @@
 
 @section('contenido')
 
-<div class="max-w-4xl mx-auto px-4 py-8">
+<div class="max-w-6xl px-4 py-8">
 
     <div class="flex flex-col md:flex-row gap-8">
         
-    <div class="md:w-1/2">
+    <div class="md:w-2xl">
         @if ($producto->imagen_producto->isNotEmpty())
         <div class="bg-gray-100 aspect-square overflow-hidden">
             <img
@@ -26,8 +26,8 @@
 
         <div class="md:w-1/2 flex flex-col gap-3">
 
-            <h2 class="text-3xl font-bold">{{ $producto->nombre_producto }}</h2>
-            <p class="text-2xl font-semibold">Precio: ${{ number_format($producto->precio, 0, ',', '.') }}</p>
+            <h2 class="text-4xl font-bold">{{ $producto->nombre_producto }}</h2>
+            <p class="text-xl font-semibold">Precio: ${{ number_format($producto->precio, 0, ',', '.') }}</p>
             <p class="text-gray-600 leading-relaxed">{{ $producto->descripcion_producto }}</p>
             <p class="text-sm text-gray-500">{{ $producto->stock }} unidades disponibles</p>
             <p class="text-sm text-gray-500">Categoría: {{ $producto->categoria->nombre_categoria }}</p>
@@ -36,16 +36,14 @@
 
         <div class="mt-2">
 
-            <p class="text-sm font-semibold mb-2">Color:</p>
+            <p class="text-sm font-semibold mb-2">Color: <span class="font-normal text-gray-600">{{ $producto->color }}</span></p>
 
-            <div class="flex flex-wrap gap-2">
-                <span class="{{ $producto->colorClases() }} rounded px-4 py-2 text-sm font-medium">
-                    {{ $producto->color }}
-                </span>
+            <div class="flex flex-wrap gap-3">
+                <span class="{{ $producto->colorClases() }} w-10 h-10 rounded-full ring-2 ring-offset-2 ring-black"></span>
 
                 @foreach ($variantesColor as $variante)
-                    <a href="{{ route('catalogo.producto', $variante->id) }}" class="{{ $variante->colorClases() }} rounded px-4 py-2 text-sm font-medium opacity-70 hover:opacity-100 transition-opacity">
-                        {{ $variante->color }}
+                    <a href="{{ route('catalogo.producto', $variante->id) }}" title="{{ $variante->color }}">
+                        <span class="{{ $variante->colorClases() }} w-10 h-10 rounded-full border border-gray-200 opacity-80 hover:opacity-100 transition-opacity block"></span>
                     </a>
                 @endforeach
             </div>

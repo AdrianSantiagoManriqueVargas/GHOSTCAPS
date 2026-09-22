@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ImagenProducto;
+use Illuminate\Support\Facades\Storage;
 
 class ImagenProductoRepository
 {
@@ -18,6 +19,10 @@ class ImagenProductoRepository
 
     public function destroy(int $id)
     {
-        return ImagenProducto::destroy($id);
+        $imagen = ImagenProducto::findorfail($id); # trae el registro
+
+        Storage::disk('public')->delete($imagen->url_imagen); # borra el archivo fisico
+
+        return $imagen->delete(); #borra el registro de la base de datos
     }
 }

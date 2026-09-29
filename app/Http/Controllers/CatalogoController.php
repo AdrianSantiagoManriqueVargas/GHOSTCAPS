@@ -16,14 +16,17 @@ class CatalogoController extends Controller
 
     public function index()
     {
-        $productos = $this->productoservice->index();
-        return view('catalogo.index', compact('productos'));
+        $productos = $this->productoservice->indexPaginado(16);
+        return view('Catalogo.index', compact('productos'));
     }
 
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         $producto = $this->productoservice->edit($id);
         $variantesColor = $this->productoservice->variantesColor($producto);
-        return view('catalogo.producto', compact('producto', 'variantesColor'));
+        $indice = (int) $request->query('img', 0);
+        $imagenInfo = $this->productoservice->obtenerImagenActual($producto, $indice);
+
+        return view('catalogo.producto', array_merge(compact('producto', 'variantesColor'), $imagenInfo));
     }
 }

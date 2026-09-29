@@ -30,7 +30,7 @@ class ProductoUpdateRequest extends FormRequest
             'stock' => 'required|integer|min:0',
             'id_categoria' => 'required|exists:categoria,id',
             'imagenes' => 'nullable|array',
-            'imagenes.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+            'imagenes.*' => 'image|mimes:jpg,jpeg,png,webp|max:3048',
         ];
     }
 }

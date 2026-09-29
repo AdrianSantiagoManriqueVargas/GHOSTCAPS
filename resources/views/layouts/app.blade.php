@@ -6,7 +6,7 @@
     <title>@yield('titulo')</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-200 flex flex-col min-h-screen">
+<body class="bg-white flex flex-col min-h-screen">
 
     <nav class="sticky top-0 z-10 bg-black text-white grid grid-cols-3 items-center px-10 py-2">
 
@@ -34,9 +34,9 @@
     <footer class="bg-black text-white px-10 py-5">
         <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
 
-            <img src="{{ asset('img/logo-letras.png') }}" alt="GhostCaps" class="h-20">
+            <img src="{{ asset('img/logo-letras.png') }}" alt="GhostCaps" class="h-32">
 
-            <div class="text-sm text-center sm:text-right">
+            <div class="text-md text-center sm:text-right">
                 <p>contacto@gmail.com</p>
                 <p>+57 3172126545</p>
                 <p>+57 3112323435</p>

@@ -42,4 +42,10 @@ class ProductoRepository{
         return Producto::where('nombre_producto', $nombre)->where('id', '!=', $excluirId)->get(); // El metodo where permite filtrar los productos por nombre y excluir el producto con el ID especificado (en este caso el mismo producto ya visto)
     }
 
+    public function indexPaginado(int $pagina = 16)
+    {
+        return Producto::with(['categoria', 'imagen_producto'])->latest()->paginate($pagina);
+    }
+    
+
 }

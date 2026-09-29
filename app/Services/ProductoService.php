@@ -69,4 +69,20 @@ class ProductoService{
     public function variantesColor(Producto $producto){
         return $this->productorepository->buscarPorNombre($producto->nombre_producto, $producto->id);
     }
+
+    public function obtenerImagenActual(Producto $producto, int $indice): array{
+        $imagenes = $producto->imagen_producto;
+        $imagenActual = $imagenes->get($indice) ?? $imagenes->first();
+
+        return [
+            'imagenActual' => $imagenActual,
+            'indiceActual' => $indice,
+            'tieneAnterior' => $indice > 0,
+            'tieneSiguiente' => $indice < $imagenes->count() - 1,
+        ];
+    }
+
+    public function indexPaginado(int $pagina = 16){
+        return $this->productorepository->indexPaginado($pagina);
+    }
 }

@@ -6,6 +6,18 @@
 
 @section('contenido')
 
+@if ($errors->any())
+    <div style="background: #fee2e2; color: #991b1b; padding: 15px; margin-bottom: 20px;">
+        <strong>Errores:</strong>
+
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="">
 
     <div class="">

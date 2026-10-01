@@ -4,6 +4,7 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CatalogoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
@@ -35,3 +36,7 @@ Route::get('carrito', [CarritoController::class, 'index'])->name('carrito.index'
 Route::delete('carrito/eliminar/{producto}', [CarritoController::class, 'destroy'])->name('carrito.destroy');
 
 Route::put('carrito/actualizar/{producto}', [CarritoController::class, 'update'])->name('carrito.update');
+
+// CLIENTE
+
+Route::resource('cliente', ClienteController::class);

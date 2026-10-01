@@ -24,7 +24,7 @@ class CategoriaUpdateRequest extends FormRequest
     {
         return [
             'nombre_categoria' => 'required|string|max:255',
-            'descripcion_categoria' => 'nullable|string|max:255'
+            'descripcion_categoria' => 'nullable|string|max:455'
         ];
     }
 }

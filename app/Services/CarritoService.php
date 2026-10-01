@@ -4,6 +4,13 @@ namespace App\Services;
 
 class CarritoService{
 
+    private ProductoService $productoservice;
+
+    public function __construct(ProductoService $productoservice)
+    {
+        $this->productoservice = $productoservice;
+    }
+
     public function agregar(int $idProducto){
         $carrito = session('carrito', []);
 
@@ -35,4 +42,29 @@ class CarritoService{
         session(['carrito' => $carrito]);
     }   
 
+    public function vaciar(){
+        session()->forget('carrito');
+    }
+
+    public function obtenerDetallado(): array
+    {
+        $carrito = $this->obtener();
+
+        $items = [];
+        foreach ($carrito as $idProducto => $cantidad) {
+            $producto = $this->productoservice->edit($idProducto);
+            $items[] = [
+                'producto' => $producto,
+                'cantidad' => $cantidad,
+                'subtotal' => $producto->precio * $cantidad,
+            ];
+        }
+
+        $total = array_sum(array_column($items, 'subtotal'));
+
+        return [
+            'items' => $items,
+            'total' => $total,
+        ];
+    }
 }

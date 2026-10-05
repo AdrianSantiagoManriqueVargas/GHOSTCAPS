@@ -56,12 +56,28 @@
                         </a>
                     @endforeach
                 </div>
+
             </div>
 
-            <form action="{{ route('carrito.store', $producto->id) }}" method="POST" class="mt-4">
-                @csrf
-                <button type="submit" class="w-full bg-black text-white py-3 rounded font-semibold hover:bg-gray-800 transition-colors ">Agregar al carrito</button>
-            </form>
+            {{-- Botones comprar ahora o agregar al carrito --}}
+
+            <div class="mt-4 flex flex-col gap-3">
+                
+                <form action="{{ route('carrito.comprarAhora', $producto->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full bg-black text-white py-4 rounded font-bold text-lg hover:bg-gray-800 transition-colors">
+                        Comprar ahora
+                    </button>
+                </form>
+
+                <form action="{{ route('carrito.store', $producto->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full border border-black text-black py-3 rounded font-semibold hover:bg-gray-100 transition-colors">
+                        Agregar al carrito
+                    </button>
+                </form>
+
+            </div>
 
         </div>
     </div>

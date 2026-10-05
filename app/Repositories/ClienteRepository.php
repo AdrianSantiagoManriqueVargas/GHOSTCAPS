@@ -33,4 +33,9 @@ class ClienteRepository
         $cliente = Cliente::findOrFail($id);
         return $cliente->delete();
     }
+
+    public function buscarPorDocumento(string $numeroDocumento)
+    {
+        return Cliente::where('numero_documento', $numeroDocumento)->first();
+    }
 }

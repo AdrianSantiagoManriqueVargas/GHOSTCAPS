@@ -37,4 +37,9 @@ class ClienteService
     {
         return $this->clienterepository->destroy($id);
     }
+    
+    public function buscarPorDocumento(string $numeroDocumento)
+    {
+        return $this->clienterepository->buscarPorDocumento($numeroDocumento);
+    }
 }

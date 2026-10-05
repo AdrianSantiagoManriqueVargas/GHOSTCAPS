@@ -67,4 +67,9 @@ class CarritoService{
             'total' => $total,
         ];
     }
+
+    public function totalUnidades(): int
+    {
+        return array_sum($this->obtener());
+    }
 }

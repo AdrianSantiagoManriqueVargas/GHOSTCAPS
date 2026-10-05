@@ -10,7 +10,7 @@
 
     <nav class="sticky top-0 z-10 bg-black text-white grid grid-cols-3 items-center px-10 py-2">
 
-        <a href="{{ route('inicio') }}" class="justify-self-start">
+        <a href="{{ route('inicio') }}" class="justify-self-start hover:scale-125 transition-transform">
             <img src="{{ asset('img/logo.png') }}" alt="GhostCaps" class="h-20">
         </a>
 
@@ -23,11 +23,27 @@
             </a>
         </div>
 
-        <div></div>
+        <div class="justify-self-end relative hover:scale-125 transition-transform">
+            <a href="{{ route('carrito.index') }}">
+                <img src="{{ asset('img/carrito.png') }}" alt="Carrito" class="h-8">
+                @if ($totalCarrito > 0)
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ $totalCarrito }}
+                    </span>
+                @endif
+            </a>
+        </div>
 
     </nav>
 
     <main class="flex-1">
+
+        @if (session('success'))
+            <div class="bg-green-500 text-white p-4 mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @yield('contenido')
     </main>
 

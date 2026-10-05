@@ -4,6 +4,7 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CatalogoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ProductoController;
@@ -37,6 +38,14 @@ Route::delete('carrito/eliminar/{producto}', [CarritoController::class, 'destroy
 
 Route::put('carrito/actualizar/{producto}', [CarritoController::class, 'update'])->name('carrito.update');
 
+Route::post('carrito/comprar/{producto}', [CarritoController::class, 'comprarAhora'])->name('carrito.comprarAhora');
+
 // CLIENTE
 
 Route::resource('cliente', ClienteController::class);
+
+// CHECKOUT
+
+Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.create');
+
+Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');

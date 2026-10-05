@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\View\Composers\CarritoComposer;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useTailwind();
+
+        View::composer('layouts.app', CarritoComposer::class);
     }
 }

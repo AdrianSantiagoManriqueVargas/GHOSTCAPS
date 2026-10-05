@@ -26,25 +26,10 @@ class CarritoController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        
-    }
-
     public function store(int $producto)
     {
         $this->carritoservice->agregar($producto);
         return back();
-    }
-
-    public function show()
-    {
-        
-    }
-
-    public function edit()
-    {
-        
     }
 
     public function update(CarritoUpdateRequest $request, int $producto)
@@ -57,5 +42,11 @@ class CarritoController extends Controller
     {
         $this->carritoservice->eliminar($producto);
         return back();
+    }
+
+    public function comprarAhora(int $producto)
+    {
+    $this->carritoservice->agregar($producto);
+    return redirect()->route('checkout.create');
     }
 }

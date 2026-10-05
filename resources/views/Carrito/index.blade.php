@@ -59,6 +59,14 @@
 
     </div>
 
+        @if (!empty($items))
+            <div class="">
+                <a href="{{ route('checkout.create') }}" class="">
+                    Finalizar compra
+                </a>
+            </div>
+        @endif
+
     <div class="">
         <a href="{{ route('catalogo.index') }}" class="">
             Volver

@@ -12,8 +12,6 @@ use Illuminate\Http\Request;
 class CheckoutController extends Controller
 {
 
-    private const COSTO_ENVIO = 12000;
-
     private CarritoService $carritoservice;
     private ClienteService $clienteservice;
     private PedidoService $pedidoservice;
@@ -44,7 +42,7 @@ class CheckoutController extends Controller
 
         $detalle = $this->carritoservice->obtenerDetallado();
         $subtotal = $detalle['total'];
-        $costoEnvio = self::COSTO_ENVIO;
+        $costoEnvio = config('tienda.costo_envio');
         $total = $subtotal + $costoEnvio;
 
         $mensajeWhatsapp = $this->pedidoservice->mensajeWhatsApp(

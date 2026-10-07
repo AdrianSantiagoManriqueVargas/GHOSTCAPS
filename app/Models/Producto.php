@@ -16,6 +16,7 @@ class Producto extends Model
         'nombre_producto',
         'descripcion_producto',
         'color',
+        'color_secundario',
         'precio',
         'stock',
         'id_categoria'
@@ -34,12 +35,10 @@ class Producto extends Model
     }
 
     public function colorClases(): string{
-        return match($this->color) {
-            'Rojo' => 'bg-red-600 text-white',
-            'Negro' => 'bg-black text-white',
-            'Blanco' => 'bg-white text-black border border-gray-300',
-            'Azul' => 'bg-blue-600 text-white',
-            default => 'bg-gray-200 text-black',
-        };
+        return "bg-[{$this->color}]";
+    }
+
+    public function colorSecundarioClases(): string{
+        return $this->color_secundario ? "bg-[{$this->color_secundario}]" : 'bg-gray-200';
     }
 }

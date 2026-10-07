@@ -19,10 +19,13 @@ class CarritoController extends Controller
     public function index()
     {
         $detalle = $this->carritoservice->obtenerDetallado();
+        $costoEnvio = config('tienda.costo_envio');
 
         return view('Carrito.index', [
             'items' => $detalle['items'],
-            'total' => $detalle['total'],
+            'subtotal' => $detalle['total'],
+            'costoEnvio' => $costoEnvio,
+            'total' => $detalle['total'] + $costoEnvio,
         ]);
     }
 

@@ -16,36 +16,32 @@ Route::get('/', function () {
 
 // RUTAS PARA LA GESTION DE PRODUCTOS
 
-Route::resource('categoria', CategoriaController::class);
+Route::prefix('gestion')->group(function () {
 
-Route::resource('producto', ProductoController::class);
+    Route::get('/', function () {
+        return view('gestion.index');
+    })->name('gestion.index');
 
-Route::delete('imagenproducto/{id}', [ImagenProductoController::class, 'destroy'])->name('imagenproducto.destroy');
+    Route::resource('categoria', CategoriaController::class);
+    Route::resource('producto', ProductoController::class);
+    Route::delete('imagenproducto/{id}', [ImagenProductoController::class, 'destroy'])->name('imagenproducto.destroy');
+    Route::resource('cliente', ClienteController::class);
+});
 
 // RUTAS PUBLICAS
 
 Route::get('catalogo', [CatalogoController::class, 'index'])->name('catalogo.index');
-
 Route::get('catalogo/producto/{id}', [CatalogoController::class, 'show'])->name('catalogo.producto');
 
 // CARRITO TEMPORAL
 
 Route::post('carrito/agregar/{producto}', [CarritoController::class, 'store'])->name('carrito.store');
-
 Route::get('carrito', [CarritoController::class, 'index'])->name('carrito.index');
-
 Route::delete('carrito/eliminar/{producto}', [CarritoController::class, 'destroy'])->name('carrito.destroy');
-
 Route::put('carrito/actualizar/{producto}', [CarritoController::class, 'update'])->name('carrito.update');
-
 Route::post('carrito/comprar/{producto}', [CarritoController::class, 'comprarAhora'])->name('carrito.comprarAhora');
-
-// CLIENTE
-
-Route::resource('cliente', ClienteController::class);
 
 // CHECKOUT
 
 Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.create');
-
 Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');

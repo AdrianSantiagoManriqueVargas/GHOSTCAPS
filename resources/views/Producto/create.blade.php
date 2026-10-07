@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.gestion')
 
 @section('titulo')
     Crear Producto
@@ -35,18 +35,22 @@
 
             <div>
                 <label for="" class="block mb-2 font-semibold">Descripcion</label>
-                <input name="descripcion_producto">
+                <input class="w-96" name="descripcion_producto">
+            </div>
+            
+            <div class="mb-5">
+                <label for="" class="block mb-2 font-semibold">Color</label>
+                <input type="color" name="color" value="{{ old('color', '#000000') }}">
             </div>
 
             <div class="mb-5">
-                <label for="" class="block mb-2 font-semibold">Color</label>
-                <select name="color" class="">
-                    @php $colorActual = old('color'); @endphp
-                    <option @selected($colorActual == 'Rojo')>Rojo</option>
-                    <option @selected($colorActual == 'Negro')>Negro</option>
-                    <option @selected($colorActual == 'Blanco')>Blanco</option>
-                    <option @selected($colorActual == 'Azul')>Azul</option>
-                </select>
+                <label>
+                    <input type="checkbox" name="tiene_color_secundario" value="1" {{ old('tiene_color_secundario') ? 'checked' : '' }}>
+                    Tiene color secundario
+                </label>
+                <br>
+                <label for="" class="block mb-2 font-semibold">Color secundario</label>
+                <input type="color" name="color_secundario" value="{{ old('color_secundario', '#ffffff') }}">
             </div>
 
             <div>

@@ -25,7 +25,9 @@ class ProductoUpdateRequest extends FormRequest
         return [
             'nombre_producto' => 'required|string|max:100',
             'descripcion_producto' => 'required|string|max:255',
-            'color' => 'required',
+            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'tiene_color_secundario' => 'nullable|boolean',
+            'color_secundario' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'precio' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'id_categoria' => 'required|exists:categoria,id',

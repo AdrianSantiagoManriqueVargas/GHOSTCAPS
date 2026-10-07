@@ -48,11 +48,19 @@
                 <p class="text-sm font-semibold mb-2">Color: <span class="font-normal text-gray-600">{{ $producto->color }}</span></p>
 
                 <div class="flex flex-wrap gap-3">
-                    <span class="{{ $producto->colorClases() }} w-10 h-10 rounded-full ring-2 ring-offset-2 ring-black"></span>
+                    <span class="relative {{ $producto->colorClases() }} w-10 h-10 rounded-full ring-2 ring-offset-2 ring-black block">
+                        @if ($producto->color_secundario)
+                            <span class="absolute -bottom-1 -right-1 {{ $producto->colorSecundarioClases() }} w-4 h-4 rounded-full border-2 border-white"></span>
+                        @endif
+                    </span>
 
                     @foreach ($variantesColor as $variante)
-                        <a href="{{ route('catalogo.producto', $variante->id) }}" title="{{ $variante->color }}">
-                            <span class="{{ $variante->colorClases() }} w-10 h-10 rounded-full border border-gray-200 opacity-80 hover:opacity-100 transition-opacity block"></span>
+                        <a href="{{ route('catalogo.producto', $variante->id) }}" title="{{ $variante->color }}{{ $variante->color_secundario ? ' / ' . $variante->color_secundario : '' }}">
+                            <span class="relative {{ $variante->colorClases() }} w-10 h-10 rounded-full border border-gray-200 opacity-80 hover:opacity-100 transition-opacity block">
+                                @if ($variante->color_secundario)
+                                    <span class="absolute -bottom-1 -right-1 {{ $variante->colorSecundarioClases() }} w-4 h-4 rounded-full border-2 border-white"></span>
+                                @endif
+                            </span>
                         </a>
                     @endforeach
                 </div>

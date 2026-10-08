@@ -51,18 +51,19 @@
             </div>
 
             <div class="mb-5">
-                <label for="" class="block mb-2 font-semibold">Color</label>
-                <input type="color" name="color" value="{{ old('color', $producto->color) }}">
+                <label for="" class="block mb-2 font-semibold">Agregar color principal nuevo (opcional)</label>
+                <div class="flex gap-3 items-center">
+                    <input type="text" name="colores[0][nombre_color]" placeholder="Déjalo vacío si no quieres agregar uno">
+                    <input type="color" name="colores[0][codigo_hex]" value="#000000">
+                </div>
             </div>
 
             <div class="mb-5">
-                <label>
-                    <input type="checkbox" name="tiene_color_secundario" value="1" {{ old('tiene_color_secundario', $producto->color_secundario ? '1' : '') ? 'checked' : '' }}>
-                    Tiene color secundario
-                </label>
-                <br>
-                <label for="" class="block mb-2 font-semibold">Color secundario</label>
-                <input type="color" name="color_secundario" value="{{ old('color_secundario', $producto->color_secundario ?? '#ffffff') }}">
+                <label for="" class="block mb-2 font-semibold">Agregar color secundario nuevo (opcional)</label>
+                <div class="flex gap-3 items-center">
+                    <input type="text" name="colores[1][nombre_color]" placeholder="Déjalo vacío si no quieres agregar uno">
+                    <input type="color" name="colores[1][codigo_hex]" value="#000000">
+                </div>
             </div>
 
             <div class="mb-5">
@@ -107,6 +108,24 @@
                     </div>
                 @empty
                     <p>Este producto no tiene imagenes</p>
+                @endforelse
+            </div>
+
+            <h3>Colores actuales</h3>
+
+            <div>
+                @forelse ($producto->color_producto as $color)
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="inline-block w-8 h-8 rounded-full border" style="background-color: {{ $color->codigo_hex }}"></span>
+                        <span>{{ $color->nombre_color }}</span>
+                        <form action="{{ route('colorproducto.destroy', $color->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </div>
+                @empty
+                    <p>Este producto no tiene colores</p>
                 @endforelse
             </div>
         

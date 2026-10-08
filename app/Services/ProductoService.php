@@ -9,17 +9,23 @@ class ProductoService{
 
     private ProductoRepository $productorepository;
     private ImagenProductoService $imagenproductoservice;
+    private ColorProductoService $colorproductoservice;
 
-    public function __construct(ProductoRepository $productorepository, ImagenProductoService $imagenproductoservice){
+    public function __construct(
+        ProductoRepository $productorepository,
+        ImagenProductoService $imagenproductoservice,
+        ColorProductoService $colorproductoservice
+    ){
         $this->productorepository = $productorepository;
         $this->imagenproductoservice = $imagenproductoservice;
+        $this->colorproductoservice = $colorproductoservice;
     }
 
     public function index(){
         return $this->productorepository->index();
     }
 
-    public function store(array $dataProducto, array $imagenes){
+    public function store(array $dataProducto, array $imagenes, array $colores){
 
         $producto = $this->productorepository->store($dataProducto);
 
@@ -30,7 +36,16 @@ class ProductoService{
                 'id_producto' => $producto->id,
                 'url_imagen' => $ruta,
             ]);
+        }
 
+        foreach ($colores as $color){
+            if (!empty($color['nombre_color'])) {
+                $this->colorproductoservice->store([
+                    'id_producto' => $producto->id,
+                    'nombre_color' => $color['nombre_color'],
+                    'codigo_hex' => $color['codigo_hex'],
+                ]);
+            }
         }
     }
 
@@ -38,7 +53,7 @@ class ProductoService{
         return $this->productorepository->edit($id);
     }
 
-    public function update(int $id, array $datosProducto, ?array $imagenes = null){
+    public function update(int $id, array $datosProducto, ?array $imagenes = null, ?array $colores = null){
         $this->productorepository->update($id, $datosProducto);
 
         if ($imagenes) {
@@ -51,16 +66,28 @@ class ProductoService{
             }
         }
 
+        if ($colores) {
+            foreach ($colores as $color) {
+                if (!empty($color['nombre_color'])) {
+                    $this->colorproductoservice->store([
+                        'id_producto' => $id,
+                        'nombre_color' => $color['nombre_color'],
+                        'codigo_hex' => $color['codigo_hex'],
+                    ]);
+                }
+            }
+        }
     }   
 
     public function destroy(int $id){
         $producto = $this->productorepository->edit($id);
 
-
-
         foreach ($producto->imagen_producto as $imagen) {
             $this->imagenproductoservice->destroy($imagen->id);
-        
+        }
+
+        foreach ($producto->color_producto as $color) {
+            $this->colorproductoservice->destroy($color->id);
         }
 
         $this->productorepository->destroy($id);

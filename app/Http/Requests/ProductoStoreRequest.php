@@ -7,32 +7,26 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProductoStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
             'nombre_producto' => 'required|string|max:100',
             'descripcion_producto' => 'required|string|max:255',
-            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'tiene_color_secundario' => 'nullable|boolean',
-            'color_secundario' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'precio' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'id_categoria' => 'required|exists:categoria,id',
             'imagenes' => 'required|array|min:1',
             'imagenes.*' => 'image|mimes:jpg,jpeg,png,webp|max:3048',
+            'colores' => 'required|array|min:1',
+            'colores.0.nombre_color' => 'required|string|max:100',
+            'colores.0.codigo_hex' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'colores.1.nombre_color' => 'nullable|string|max:100',
+            'colores.1.codigo_hex' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ];
     }
 }

@@ -33,13 +33,11 @@ class ProductoController extends Controller
 
     public function store(ProductoStoreRequest $request)
     {
-        $datos = $request->safe()->except(['imagenes', 'tiene_color_secundario']);
-
-        if (!$request->boolean('tiene_color_secundario')) {
-            $datos['color_secundario'] = null;
-        }
-
-        $this->productoservice->store($datos, $request->file('imagenes'));
+        $this->productoservice->store(
+            $request->safe()->except(['imagenes', 'colores']),
+            $request->file('imagenes'),
+            $request->input('colores', [])
+        );
 
         return redirect()->route('producto.index');
     }
@@ -60,13 +58,13 @@ class ProductoController extends Controller
 
     public function update(int $id, ProductoUpdateRequest $request)
     {
-        $datos = $request->safe()->except(['imagenes', 'tiene_color_secundario']);
+        $this->productoservice->update(
+            $id,
+            $request->safe()->except(['imagenes', 'colores']),
+            $request->file('imagenes'),
+            $request->input('colores')
+        );
 
-        if (!$request->boolean('tiene_color_secundario')) {
-            $datos['color_secundario'] = null;
-        }
-
-        $this->productoservice->update($id, $datos, $request->file('imagenes'));
         return redirect()->route('producto.index');
     }
 

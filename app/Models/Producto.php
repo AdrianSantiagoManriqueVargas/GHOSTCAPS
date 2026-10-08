@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-
     use HasFactory;
 
     protected $table = 'producto';
@@ -15,8 +14,6 @@ class Producto extends Model
     protected $fillable = [
         'nombre_producto',
         'descripcion_producto',
-        'color',
-        'color_secundario',
         'precio',
         'stock',
         'id_categoria'
@@ -34,11 +31,7 @@ class Producto extends Model
         return $this->hasMany(DetallePedido::class);
     }
 
-    public function colorClases(): string{
-        return "bg-[{$this->color}]";
-    }
-
-    public function colorSecundarioClases(): string{
-        return $this->color_secundario ? "bg-[{$this->color_secundario}]" : 'bg-gray-200';
+    public function color_producto(){
+        return $this->hasMany(ColorProducto::class, 'id_producto')->orderBy('id');
     }
 }

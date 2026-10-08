@@ -43,22 +43,32 @@
 
             {{-- Variantes de color --}}
 
+            @php
+                $colorPrincipal = $producto->color_producto->first();
+                $colorSecundario = $producto->color_producto->get(1);
+            @endphp
+
             <div class="mt-2">
 
-                <p class="text-sm font-semibold mb-2">Color: <span class="font-normal text-gray-600">{{ $producto->color }}</span></p>
+                <p class="text-sm font-semibold mb-2">Color: <span class="font-normal text-gray-600">{{ $colorPrincipal?->nombre_color }}</span></p>
 
                 <div class="flex flex-wrap gap-3">
-                    <span class="relative {{ $producto->colorClases() }} w-10 h-10 rounded-full ring-2 ring-offset-2 ring-black block">
-                        @if ($producto->color_secundario)
-                            <span class="absolute -bottom-1 -right-1 {{ $producto->colorSecundarioClases() }} w-4 h-4 rounded-full border-2 border-white"></span>
+                    <span class="relative w-10 h-10 rounded-full ring-2 ring-offset-2 ring-black block" style="background-color: {{ $colorPrincipal?->codigo_hex }}">
+                        @if ($colorSecundario)
+                            <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white" style="background-color: {{ $colorSecundario->codigo_hex }}"></span>
                         @endif
                     </span>
 
                     @foreach ($variantesColor as $variante)
-                        <a href="{{ route('catalogo.producto', $variante->id) }}" title="{{ $variante->color }}{{ $variante->color_secundario ? ' / ' . $variante->color_secundario : '' }}">
-                            <span class="relative {{ $variante->colorClases() }} w-10 h-10 rounded-full border border-gray-200 opacity-80 hover:opacity-100 transition-opacity block">
-                                @if ($variante->color_secundario)
-                                    <span class="absolute -bottom-1 -right-1 {{ $variante->colorSecundarioClases() }} w-4 h-4 rounded-full border-2 border-white"></span>
+                        @php
+                            $varPrincipal = $variante->color_producto->first();
+                            $varSecundario = $variante->color_producto->get(1);
+                        @endphp
+                        <a href="{{ route('catalogo.producto', $variante->id) }}"
+                        title="{{ $varPrincipal?->nombre_color }}{{ $varSecundario ? ' / ' . $varSecundario->nombre_color : '' }}">
+                            <span class="relative w-10 h-10 rounded-full border border-gray-200 opacity-80 hover:opacity-100 transition-opacity block" style="background-color: {{ $varPrincipal?->codigo_hex }}">
+                                @if ($varSecundario)
+                                    <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white" style="background-color: {{ $varSecundario->codigo_hex }}"></span>
                                 @endif
                             </span>
                         </a>
@@ -66,7 +76,6 @@
                 </div>
 
             </div>
-
             {{-- Botones comprar ahora o agregar al carrito --}}
 
             <div class="mt-4 flex flex-col gap-3">

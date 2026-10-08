@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ColorProductoController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
@@ -25,6 +26,7 @@ Route::prefix('gestion')->group(function () {
     Route::resource('categoria', CategoriaController::class);
     Route::resource('producto', ProductoController::class);
     Route::delete('imagenproducto/{id}', [ImagenProductoController::class, 'destroy'])->name('imagenproducto.destroy');
+    Route::delete('colorproducto/{id}', [ColorProductoController::class, 'destroy'])->name('colorproducto.destroy');
     Route::resource('cliente', ClienteController::class);
 });
 

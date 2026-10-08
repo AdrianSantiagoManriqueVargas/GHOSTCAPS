@@ -39,18 +39,19 @@
             </div>
             
             <div class="mb-5">
-                <label for="" class="block mb-2 font-semibold">Color</label>
-                <input type="color" name="color" value="{{ old('color', '#000000') }}">
+                <label for="" class="block mb-2 font-semibold">Color principal</label>
+                <div class="flex gap-3 items-center">
+                    <input type="text" name="colores[0][nombre_color]" placeholder="Nombre del color" value="{{ old('colores.0.nombre_color') }}">
+                    <input type="color" name="colores[0][codigo_hex]" value="{{ old('colores.0.codigo_hex', '#000000') }}">
+                </div>
             </div>
 
             <div class="mb-5">
-                <label>
-                    <input type="checkbox" name="tiene_color_secundario" value="1" {{ old('tiene_color_secundario') ? 'checked' : '' }}>
-                    Tiene color secundario
-                </label>
-                <br>
-                <label for="" class="block mb-2 font-semibold">Color secundario</label>
-                <input type="color" name="color_secundario" value="{{ old('color_secundario', '#ffffff') }}">
+                <label for="" class="block mb-2 font-semibold">Color secundario (opcional)</label>
+                <div class="flex gap-3 items-center">
+                    <input type="text" name="colores[1][nombre_color]" placeholder="Déjalo vacío si no aplica" value="{{ old('colores.1.nombre_color') }}">
+                    <input type="color" name="colores[1][codigo_hex]" value="{{ old('colores.1.codigo_hex', '#000000') }}">
+                </div>
             </div>
 
             <div>

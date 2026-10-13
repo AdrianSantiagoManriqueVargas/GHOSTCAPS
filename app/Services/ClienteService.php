@@ -42,4 +42,9 @@ class ClienteService
     {
         return $this->clienterepository->buscarPorDocumento($numeroDocumento);
     }
+
+    public function indexPaginado(int $pagina = 10)
+    {
+        return $this->clienterepository->indexPaginado($pagina);
+    }
 }

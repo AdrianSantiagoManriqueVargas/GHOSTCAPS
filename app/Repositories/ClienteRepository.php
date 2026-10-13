@@ -38,4 +38,9 @@ class ClienteRepository
     {
         return Cliente::where('numero_documento', $numeroDocumento)->first();
     }
+
+    public function indexPaginado(int $pagina = 10)
+    {
+        return Cliente::paginate($pagina);
+    }
 }

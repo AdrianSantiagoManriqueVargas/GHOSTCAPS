@@ -27,7 +27,17 @@ class CheckoutController extends Controller
 
     public function create()
     {
-        return view('checkout.create');
+        $detalle = $this->carritoservice->obtenerDetallado();
+        $subtotal = $detalle['total'];
+        $costoEnvio = config('tienda.costo_envio');
+        $total = $subtotal + $costoEnvio;
+
+        return view('checkout.create', [
+            'items' => $detalle['items'],
+            'subtotal' => $subtotal,
+            'costoEnvio' => $costoEnvio,
+            'total' => $total,
+        ]);
     }
 
     public function store(CheckoutStoreRequest $request)

@@ -44,8 +44,6 @@ class ProductoRepository{
 
     public function indexPaginado(int $pagina = 16)
     {
-        return Producto::with(['categoria', 'imagen_producto'])->latest()->paginate($pagina);
+        return Producto::with(['categoria', 'imagen_producto', 'color_producto'])->latest()->paginate($pagina);
     }
-    
-
 }

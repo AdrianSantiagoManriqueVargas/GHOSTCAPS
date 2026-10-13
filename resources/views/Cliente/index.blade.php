@@ -25,20 +25,26 @@
             </tr>
         </thead>
         <tbody class="divide-y">
-            @forelse ($cliente as $cliente)
+            @forelse ($clientes as $cliente)
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-medium text-gray-800">{{ $cliente->nombre_cliente }}</td>
                     <td class="p-3 text-gray-600">{{ $cliente->telefono_cliente }}</td>
                     <td class="p-3 text-gray-600">{{ $cliente->correo_cliente }}</td>
                     <td class="p-3 text-gray-600">{{ $cliente->tipo_documento }} {{ $cliente->numero_documento }}</td>
                     <td class="p-3 text-gray-600">{{ $cliente->ciudad }}</td>
-                    <td class="p-3 flex gap-3">
-                        <a href="{{ route('cliente.edit', $cliente->id) }}" class="text-blue-600 hover:underline">Editar</a>
-                        <form action="{{ route('cliente.destroy', $cliente->id) }}" method="post" onsubmit="return confirm('¿Eliminar este cliente?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:underline">Eliminar</button>
-                        </form>
+                    <td class="p-3">
+                        <div class="flex gap-2">
+                            <a href="{{ route('cliente.edit', $cliente->id) }}" class="bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1.5 rounded hover:bg-blue-100 transition-colors">
+                                Editar
+                            </a>
+                            <form action="{{ route('cliente.destroy', $cliente->id) }}" method="post" onsubmit="return confirm('¿Eliminar este cliente?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-50 text-red-700 text-xs font-semibold px-3 py-1.5 rounded hover:bg-red-100 transition-colors">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @empty
@@ -48,6 +54,10 @@
             @endforelse
         </tbody>
     </table>
+
+    <div class="p-4 border-t">
+        {{ $clientes->links() }}
+    </div>
 
 </div>
 

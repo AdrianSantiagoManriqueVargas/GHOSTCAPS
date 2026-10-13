@@ -43,7 +43,11 @@
                     <div>
                         <p class="font-semibold">{{ $producto->nombre_producto }}</p>
                         <p class="font-light text-gray-600">{{ $producto->descripcion_producto }}</p>
-                        <p class="text-sm text-gray-400">Color: {{ $producto->color }}</p>
+                        <div class="flex gap-1 mt-1">
+                            @foreach ($producto->color_producto as $color)
+                                <span class="w-4 h-4 rounded-full border inline-block" style="background-color: {{ $color->codigo_hex }}" title="{{ $color->nombre_color }}"></span>
+                            @endforeach
+                        </div>
                     </div>
 
                     <div class="flex items-end justify-between mt-4">

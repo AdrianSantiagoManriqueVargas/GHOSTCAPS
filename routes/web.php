@@ -10,6 +10,7 @@ use App\Http\Controllers\ColorProductoController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
+use App\Models;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,7 +21,12 @@ Route::get('/', function () {
 Route::prefix('gestion')->group(function () {
 
     Route::get('/', function () {
-        return view('gestion.index');
+        return view('gestion.index', [
+            'totalProductos' => \App\Models\Producto::count(),
+            'totalCategorias' => \App\Models\Categoria::count(),
+            'totalClientes' => \App\Models\Cliente::count(),
+            'totalPedidos' => \App\Models\Pedido::count(),
+        ]);
     })->name('gestion.index');
 
     Route::resource('categoria', CategoriaController::class);

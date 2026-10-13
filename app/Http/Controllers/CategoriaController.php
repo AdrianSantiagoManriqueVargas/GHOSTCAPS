@@ -18,8 +18,8 @@ class CategoriaController extends Controller
 
     public function index()
     {
-        $categoria = $this->categoriaservice->index();
-        return view('categoria.index', compact('categoria'));
+        $categorias = $this->categoriaservice->indexPaginado(10);
+        return view('categoria.index', compact('categorias'));
     }
 
     public function create()

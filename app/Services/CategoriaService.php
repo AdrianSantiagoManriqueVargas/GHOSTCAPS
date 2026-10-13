@@ -31,4 +31,8 @@ class CategoriaService{
         $this->categoriarepository->destroy($id);
     }
 
+    public function indexPaginado(int $pagina = 10){
+        return $this->categoriarepository->indexPaginado($pagina);
+    }
+
 }

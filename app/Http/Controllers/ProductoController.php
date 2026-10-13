@@ -21,7 +21,7 @@ class ProductoController extends Controller
 
     public function index()
     {
-        $productos = $this->productoservice->index();
+        $productos = $this->productoservice->indexPaginado(9);
         return view('producto.index', compact('productos'));
     }
 

@@ -37,4 +37,9 @@ class CategoriaRepository{
         Categoria::destroy($id);
     }
 
+    public function indexPaginado(int $pagina = 10)
+    {
+        return Categoria::paginate($pagina);
+    }
+
 }

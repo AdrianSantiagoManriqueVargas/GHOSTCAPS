@@ -18,8 +18,8 @@ class ClienteController extends Controller
 
     public function index()
     {   
-        $cliente = $this->clienteservice->index();
-        return view('cliente.index', compact('cliente'));
+        $clientes = $this->clienteservice->indexPaginado(10);
+        return view('cliente.index', compact('clientes'));
     }
 
     public function create()

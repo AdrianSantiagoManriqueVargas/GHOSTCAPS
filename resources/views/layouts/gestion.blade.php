@@ -8,12 +8,30 @@
 </head>
 <body class="bg-gray-50">
 
-    <nav class="bg-gray-900 text-white px-6 py-4 flex gap-6 items-center shadow">
-        <a href="{{ route('gestion.index') }}" class="font-bold text-lg">Panel de Gestión</a>
-        <a href="{{ route('categoria.index') }}" class="text-sm text-gray-300 hover:text-white transition-colors">Categorías</a>
-        <a href="{{ route('producto.index') }}" class="text-sm text-gray-300 hover:text-white transition-colors">Productos</a>
-        <a href="{{ route('cliente.index') }}" class="text-sm text-gray-300 hover:text-white transition-colors">Clientes</a>
-        <a href="{{ route('inicio') }}" class="ml-auto text-sm text-gray-400 hover:text-white transition-colors">Ver sitio →</a>
+    <nav class="sticky top-0 z-10 bg-black text-white px-8 py-3 flex items-center justify-between shadow-md">
+
+        <div class="flex items-center gap-8">
+            <a href="{{ route('gestion.index') }}" class="font-bold tracking-wide {{ request()->routeIs('gestion.index') ? 'text-red-500' : 'text-white hover:text-red-400' }} transition-colors">
+                Panel de Gestión
+            </a>
+
+            <div class="hidden sm:flex items-center gap-6 text-md">
+                <a href="{{ route('categoria.index') }}" class="font-semibold tracking-wide transition-colors {{ request()->routeIs('categoria.*') ? 'text-red-500' : 'text-gray-300 hover:text-red-400' }}">
+                    Categorías
+                </a>
+                <a href="{{ route('producto.index') }}" class="font-semibold tracking-wide transition-colors {{ request()->routeIs('producto.*') ? 'text-red-500' : 'text-gray-300 hover:text-red-400' }}">
+                    Productos
+                </a>
+                <a href="{{ route('cliente.index') }}" class="font-semibold tracking-wide transition-colors {{ request()->routeIs('cliente.*') ? 'text-red-500' : 'text-gray-300 hover:text-red-400' }}">
+                    Clientes
+                </a>
+            </div>
+        </div>
+
+        <a href="{{ route('inicio') }}" class="hover:scale-110 transition-transform" title="Volver al sitio">
+            <img src="{{ asset('img/logo-letras.png') }}" alt="GhostCaps" class="h-20 w-auto">
+        </a>
+
     </nav>
 
     <main class="p-6 max-w-7xl mx-auto">

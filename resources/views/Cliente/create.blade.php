@@ -6,13 +6,13 @@
 
 @section('contenido')
 
-<div class="">
+<div class="bg-white rounded-lg shadow-sm border p-6 max-w-xl mx-auto">
 
-    <h2 class="">Nuevo Cliente</h2>
+    <h2 class="text-xl font-bold text-gray-800 mb-5">Nuevo Cliente</h2>
 
     @if($errors->any())
-        <div class="">
-            <ul>
+        <div class="bg-red-100 border border-red-300 text-red-800 rounded p-4 mb-5">
+            <ul class="list-disc list-inside">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -23,24 +23,24 @@
     <form action="{{ route('cliente.store') }}" method="post">
         @csrf
 
-        <div class="">
-            <label for="">Nombre</label>
-            <input name="nombre_cliente" value="{{ old('nombre_cliente') }}">
+        <div class="mb-4">
+            <label class="block mb-1 text-sm font-semibold text-gray-700">Nombre</label>
+            <input name="nombre_cliente" value="{{ old('nombre_cliente') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
-        <div class="">
-            <label for="">Telefono</label>
-            <input name="telefono_cliente" value="{{ old('telefono_cliente') }}">
+        <div class="mb-4">
+            <label class="block mb-1 text-sm font-semibold text-gray-700">Telefono</label>
+            <input name="telefono_cliente" value="{{ old('telefono_cliente') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
-        <div class="">
-            <label for="">Correo</label>
-            <input name="correo_cliente" type="email" value="{{ old('correo_cliente') }}">
+        <div class="mb-4">
+            <label class="block mb-1 text-sm font-semibold text-gray-700">Correo</label>
+            <input name="correo_cliente" type="email" value="{{ old('correo_cliente') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
-        <div class="">
-            <label for="">Tipo de documento</label>
-            <select name="tipo_documento">
+        <div class="mb-4">
+            <label class="block mb-1 text-sm font-semibold text-gray-700">Tipo de documento</label>
+            <select name="tipo_documento" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
                 <option value="CC" @selected(old('tipo_documento') == 'CC')>CC</option>
                 <option value="TI" @selected(old('tipo_documento') == 'TI')>TI</option>
                 <option value="CE" @selected(old('tipo_documento') == 'CE')>CE</option>
@@ -48,24 +48,24 @@
             </select>
         </div>
 
-        <div class="">
-            <label for="">Numero de documento</label>
-            <input name="numero_documento" value="{{ old('numero_documento') }}">
+        <div class="mb-4">
+            <label class="block mb-1 text-sm font-semibold text-gray-700">Numero de documento</label>
+            <input name="numero_documento" value="{{ old('numero_documento') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
-        <div class="">
-            <label for="">Direccion</label>
-            <input name="direccion" value="{{ old('direccion') }}">
+        <div class="mb-4">
+            <label class="block mb-1 text-sm font-semibold text-gray-700">Direccion</label>
+            <input name="direccion" value="{{ old('direccion') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
-        <div class="">
-            <label for="">Ciudad</label>
-            <input name="ciudad" value="{{ old('ciudad') }}">
+        <div class="mb-6">
+            <label class="block mb-1 text-sm font-semibold text-gray-700">Ciudad</label>
+            <input name="ciudad" value="{{ old('ciudad') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
-        <div class="">
-            <button type="submit" class="">Guardar</button>
-            <a href="{{ route('cliente.index') }}" class="">Cancelar</a>
+        <div class="flex items-center gap-4">
+            <button type="submit" class="bg-black text-white px-5 py-2 rounded hover:bg-gray-800 transition-colors">Guardar</button>
+            <a href="{{ route('cliente.index') }}" class="text-gray-600 hover:underline">Cancelar</a>
         </div>
 
     </form>

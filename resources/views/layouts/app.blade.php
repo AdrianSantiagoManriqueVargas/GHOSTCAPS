@@ -14,7 +14,7 @@
             <img src="{{ asset('img/logo.png') }}" alt="GhostCaps" class="h-20">
         </a>
 
-        <div class="flex gap-6 justify-self-center">
+        <div class="flex gap-6 justify-self-center text-lg">
             <a href="{{ route('inicio') }}" class="font-semibold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }} ">
                 INICIO
             </a>

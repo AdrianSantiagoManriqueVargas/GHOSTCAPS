@@ -13,7 +13,31 @@ use App\Models\Producto;
 use App\Models;
 
 Route::get('/', function () {
-    return view('welcome');
+
+    $categoriasInicio = [
+        [
+            'nombre' => 'Gorras clásicas',
+            'descripcion' => 'Estilo para todos los días',
+            'imagen' => 'img/categorias/gorras-clasicas.jpg',
+            'fondo' => 'bg-stone-200',
+        ],
+        [
+            'nombre' => 'Gorras urbanas',
+            'descripcion' => 'Destaca con tu estilo',
+            'imagen' => 'img/categorias/gorras-urbanas.jpg',
+            'fondo' => 'bg-zinc-300',
+        ],
+        [
+            'nombre' => 'Ediciones especiales',
+            'descripcion' => 'Diseños que no pasan desapercibidos',
+            'imagen' => 'img/categorias/ediciones-especiales.jpg',
+            'fondo' => 'bg-neutral-200',
+        ],
+    ];
+
+    $destacados = Producto::with(['categoria', 'imagen_producto'])->latest()->take(8)->get();
+
+    return view('welcome', compact('categoriasInicio', 'destacados'));
 })->name('inicio');
 
 // RUTAS PARA LA GESTION DE PRODUCTOS

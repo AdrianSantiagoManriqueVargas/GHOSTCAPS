@@ -35,7 +35,7 @@
             @if ($loop->iteration == 8)
                 <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-full my-6">
                     <div class="w-full h-144 overflow-hidden relative shadow-md">
-                        <img src="{{ asset('img/banner-gorras.png') }}" alt="Modelado de gorras" class="w-full h-full object-cover">
+                        <img src="{{ asset('img/banners/banner-gorras.png') }}" alt="Modelado de gorras" class="w-full h-full object-cover">
                     </div>
                 </div>
             @endif

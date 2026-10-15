@@ -66,4 +66,4 @@
         {{ $productos->links() }}
     </div>
 
-@endsection
+@endsection 

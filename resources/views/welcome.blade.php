@@ -20,17 +20,25 @@
 
         <div class="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
 
-            <h1 class="text-3xl font-black italic tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
-                GHOSTCAPS
-            </h1>
+        <h1 class="sr-only">GhostCaps</h1>
 
-            <p class="mt-1 text-[10px] italic text-white sm:text-sm">
+        @if (File::exists(public_path('img/logo-ghostcaps-banner.png')))
+            <img
+                src="{{ asset('img/logo-ghostcaps-banner.png') }}"
+                alt="GhostCaps"
+                class="w-[280px] sm:w-[420px] lg:w-[520px]"
+            >
+        @else
+            <p class="text-white">Falta el logo: img/logo-ghostcaps-banner.png</p>
+        @endif
+
+            <p class="-mt-2 text-sm italic text-white sm:-mt-4 sm:text-lg">
                 Vive en la cima.
             </p>
 
             <a
                 href="{{ route('catalogo.index') }}"
-                class="mt-4 border border-white/80 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition hover:bg-white hover:text-black sm:mt-7 sm:px-7 sm:py-3 hover:scale-125"
+                class="mt-6 border border-white/80 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white hover:text-black sm:mt-7 sm:px-8 sm:py-3.5 sm:text-sm"
             >
                 Explorar catálogo
             </a>
@@ -41,7 +49,7 @@
     {{-- CATEGORÍAS DESTACADAS --}}
     <section class="max-w-7xl mx-auto px-4 py-10">
 
-        <h2 class="text-xl font-semibold text-black mb-4">Explora por categoría</h2>
+        <h2 class="text-xl text-black mb-4 font-marker">Explora por categoría</h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             @foreach ($categoriasInicio as $categoria)
@@ -66,24 +74,23 @@
 
     </section>
 
-        {{-- BANNER COLECCIÓN DESTACADA --}}
     <section class="w-full py-10">
         <div class="relative w-full overflow-hidden shadow-md">
 
-            @if (File::exists(public_path('img/banners/bannerW.jpg')))
-                <img src="{{ asset('img/banners/bannerW.jpg') }}" alt="Colección destacada GhostCaps" class="w-full h-full object-cover">
+            @if (File::exists(public_path('img/banners/adidasbanner.jpg')))
+                <img src="{{ asset('img/banners/adidasbanner.jpg') }}" alt="Colección destacada GhostCaps" class="w-full h-full object-cover">
             @else
                 <p class="p-4 text-gray-400">Sin imagen</p>
             @endif
 
-            <div class="absolute inset-0 bg-black/30 flex flex-col items-center justify-end pb-12 text-center text-white">
+            <div class="absolute inset-0 bg-black/30 flex flex-col items-center justify-end pb-24 text-center text-white">
                 <p class="text-base uppercase tracking-widest">Colección destacada</p>
 
-                <h2 class="text-4xl font-bold">Gorras Westcol</h2>
+                <h2 class="text-4xl font-bold">Gorras Adidas</h2>
 
                 <a
                     href="{{ route('catalogo.index') }}"
-                    class="mt-4 border border-white/80 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white hover:text-black hover:scale-110"
+                    class="mt-4 border border-white/80 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white hover:text-black hover:scale-125"
                 >
                     Ver colección
                 </a>
@@ -121,5 +128,36 @@
         </div>
 
     </section>
-    
+
+    {{-- PROPUESTA DE VALOR --}}
+    <section class="bg-black text-white">
+        <div class="grid grid-cols-1 md:grid-cols-2 items-center">
+
+            <div class="px-8 py-16 sm:px-16 lg:px-24 text-center md:text-left">
+                <p class="text-base uppercase tracking-[0.3em] text-gray-400">Propuesta de valor</p>
+
+                <h2 class="font-marker text-5xl sm:text-6xl lg:text-7xl leading-tight tracking-wide mt-4">
+                    Que tu estilo llegue a la <span class="text-red-500">cima.</span>
+                </h2>
+
+                <p class="mt-6 text-lg sm:text-xl text-gray-200 leading-8 max-w-md mx-auto md:mx-0">
+                    Creamos gorras pa' que te expreses y destaques donde sea, con estilo que marca la diferencia.
+                </p>
+
+                <p class="mt-4 text-lg sm:text-xl text-gray-400 leading-8 max-w-md mx-auto md:mx-0">
+                    Nuestra misión: transformar tu look con gorras que hacen que tu estilo llegue a la cima.
+                </p>
+            </div>
+
+            <div class="flex justify-center md:justify-end px-8 pb-12 sm:px-16 md:pb-0 lg:px-24">
+                @if (File::exists(public_path('img/logo.png')))
+                    <img src="{{ asset('img/logo.png') }}" alt="Modelo con gorra GhostCaps" class="w-64 sm:w-80 lg:w-96 h-auto">
+                @else
+                    <p class="p-4 text-gray-500">Sin imagen</p>
+                @endif
+            </div>
+
+        </div>
+    </section>
+
     @endsection

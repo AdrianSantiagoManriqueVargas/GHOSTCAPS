@@ -4,7 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo')</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Permanent+Marker&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        marker: ['"Permanent Marker"', 'cursive'],
+                    },
+                },
+            },
+        };
+    </script>
 </head>
 <body class="bg-white flex flex-col min-h-screen">
 
@@ -15,10 +32,10 @@
         </a>
 
         <div class="flex gap-6 justify-self-center text-lg">
-            <a href="{{ route('inicio') }}" class="font-semibold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }} ">
+            <a href="{{ route('inicio') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }} ">
                 INICIO
             </a>
-            <a href="{{ route('catalogo.index') }}" class="font-semibold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('catalogo.index') ? 'text-red-500'   : 'text-white' }}">
+            <a href="{{ route('catalogo.index') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('catalogo.index') ? 'text-red-500'   : 'text-white' }}">
                 CATALOGO
             </a>
         </div>
@@ -47,18 +64,32 @@
         @yield('contenido')
     </main>
 
-    <footer class="bg-black text-white px-10 py-5">
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+    <footer class="bg-black text-white px-10 pb-8">
+        <div class="max-w-7xl mx-auto border-t border-white/20 pt-10 flex flex-col sm:flex-row justify-between items-center sm:items-start gap-8 text-center sm:text-left">
 
-            <img src="{{ asset('img/logo-letras.png') }}" alt="GhostCaps" class="h-32">
-
-            <div class="text-md text-center sm:text-right">
-                <p>contacto@gmail.com</p>
-                <p>+57 3172126545</p>
-                <p>+57 3112323435</p>
+            <div>
+                <h3 class="font-marker text-xl text-red-500 tracking-wide">Contacto</h3>
+                <div class="mt-3 space-y-1 text-gray-300">
+                    <p>contacto@gmail.com</p>
+                    <p>+57 3172126545</p>
+                    <p>+57 3112323435</p>
+                </div>
             </div>
-            
+
+            <div>
+                <h3 class="font-marker text-xl text-red-500 tracking-wide">Síguenos</h3>
+                <div class="mt-3 flex flex-col gap-1 text-gray-300">
+                    <a href="#" class="transition-colors hover:text-red-500">Instagram</a>
+                    <a href="#" class="transition-colors hover:text-red-500">TikTok</a>
+                    <a href="https://wa.me/573172126545" target="_blank" rel="noopener" class="transition-colors hover:text-red-500">WhatsApp</a>
+                </div>
+            </div>
+
         </div>
+
+        <p class="mt-10 text-center text-xs text-gray-500">
+            © {{ date('Y') }} GhostCaps. Todos los derechos reservados.
+        </p>
     </footer>
 
 </body>

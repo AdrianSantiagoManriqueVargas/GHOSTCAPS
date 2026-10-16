@@ -47,5 +47,4 @@
         {{ $productos->links() }}
     </div>
 </div>
-
 @endsection

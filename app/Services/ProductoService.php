@@ -109,7 +109,11 @@ class ProductoService{
         ];
     }
 
-    public function indexPaginado(int $pagina = 16){
-        return $this->productorepository->indexPaginado($pagina);
+    public function indexPaginado(int $pagina = 16, array $filtros = []){
+        return $this->productorepository->indexPaginado($pagina, $filtros);
+    }
+
+    public function coloresDisponibles(){
+        return $this->productorepository->coloresDisponibles();
     }
 }

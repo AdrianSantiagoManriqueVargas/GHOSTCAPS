@@ -14,10 +14,22 @@ class CatalogoController extends Controller
         $this->productoservice = $productoservice;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $productos = $this->productoservice->indexPaginado(16);
-        return view('Catalogo.index', compact('productos'));
+        $request->validate([
+            'precio_min' => 'nullable|numeric|min:0',
+            'precio_max' => 'nullable|numeric|min:0',
+            'colores'    => 'nullable|array',
+            'colores.*'  => 'string|max:50',
+        ]);
+
+        $filtros = array_filter($request->only(['precio_min', 'precio_max', 'colores']));
+
+        $productos = $this->productoservice->indexPaginado(16, $filtros);
+        $colores = $this->productoservice->coloresDisponibles();
+        $coloresSeleccionados = array_map('strtolower', $filtros['colores'] ?? []);
+
+        return view('Catalogo.index', compact('productos', 'filtros', 'colores', 'coloresSeleccionados'));
     }
 
     public function show(Request $request, int $id)

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\Producto;
+use App\Models\ColorProducto;
 
 class ProductoRepository{
 
@@ -42,8 +43,42 @@ class ProductoRepository{
         return Producto::where('nombre_producto', $nombre)->where('id', '!=', $excluirId)->get(); // El metodo where permite filtrar los productos por nombre y excluir el producto con el ID especificado (en este caso el mismo producto ya visto)
     }
 
-    public function indexPaginado(int $pagina = 16)
+    public function indexPaginado(int $pagina = 16, array $filtros = [])
     {
-        return Producto::with(['categoria', 'imagen_producto', 'color_producto'])->latest()->paginate($pagina);
+        $query = Producto::with(['categoria', 'imagen_producto']);
+
+        if (isset($filtros['precio_min'])) {
+            $query->where('precio', '>=', $filtros['precio_min']);
+        }
+
+        if (isset($filtros['precio_max'])) {
+            $query->where('precio', '<=', $filtros['precio_max']);
+        }
+
+        if (!empty($filtros['colores'])) {
+            $query->whereHas('color_producto', function ($q) use ($filtros) {
+                $q->where(function ($q) use ($filtros) {
+                    foreach ($filtros['colores'] as $color) {
+                        $q->orWhereRaw('LOWER(nombre_color) = ?', [strtolower($color)]);
+                    }
+                });
+            });
+        }
+
+        return $query->latest()->paginate($pagina)->withQueryString();
+    }
+
+    public function coloresDisponibles()
+    {
+        return ColorProducto::all()
+            ->groupBy(fn ($color) => strtolower($color->nombre_color))
+            ->map(function ($grupo) {
+                return (object) [
+                    'nombre_color' => $grupo->first()->nombre_color,
+                    'codigo_hex'   => $grupo->countBy('codigo_hex')->sortDesc()->keys()->first(),
+                ];
+            })
+            ->sortBy(fn ($color) => strtolower($color->nombre_color))
+            ->values();
     }
 }

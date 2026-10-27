@@ -35,6 +35,9 @@
             <a href="{{ route('inicio') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }} ">
                 INICIO
             </a>
+            <a href="{{ route('nosotros') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('nosotros') ? 'text-red-500' : 'text-white' }} ">
+                NOSOTROS
+            </a>
             <a href="{{ route('catalogo.index') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('catalogo.index') ? 'text-red-500'   : 'text-white' }}">
                 CATALOGO
             </a>

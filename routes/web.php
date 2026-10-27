@@ -65,6 +65,8 @@ Route::prefix('gestion')->group(function () {
 Route::get('catalogo', [CatalogoController::class, 'index'])->name('catalogo.index');
 Route::get('catalogo/producto/{id}', [CatalogoController::class, 'show'])->name('catalogo.producto');
 
+Route::view('nosotros', 'nosotros')->name('nosotros');
+
 // CARRITO TEMPORAL
 
 Route::post('carrito/agregar/{producto}', [CarritoController::class, 'store'])->name('carrito.store');

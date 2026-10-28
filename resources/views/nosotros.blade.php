@@ -6,7 +6,7 @@
 
 @section('contenido')
 
-<div class="bg-neutral-900 text-white">
+<div class="bg-black text-white">
 
     {{-- INTRODUCCIÓN --}}
     <section class="max-w-7xl mx-auto px-4 py-16 sm:py-24 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">

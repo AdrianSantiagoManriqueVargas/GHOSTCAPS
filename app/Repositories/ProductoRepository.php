@@ -3,6 +3,7 @@
 namespace App\Repositories;
 use App\Models\Producto;
 use App\Models\ColorProducto;
+use App\Models\Categoria;
 
 class ProductoRepository{
 
@@ -65,7 +66,18 @@ class ProductoRepository{
             });
         }
 
+        if (!empty($filtros['categorias'])) {
+            $query->whereIn('id_categoria', $filtros['categorias']);
+        }
+
         return $query->latest()->paginate($pagina)->withQueryString();
+    }
+
+    public function categoriasDisponibles()
+    {
+        return Categoria::whereIn('id', Producto::select('id_categoria'))
+            ->orderBy('nombre_categoria')
+            ->get();
     }
 
     public function coloresDisponibles()

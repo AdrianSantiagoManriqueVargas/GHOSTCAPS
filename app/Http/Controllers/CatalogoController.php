@@ -17,19 +17,26 @@ class CatalogoController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'precio_min' => 'nullable|numeric|min:0',
-            'precio_max' => 'nullable|numeric|min:0',
-            'colores'    => 'nullable|array',
-            'colores.*'  => 'string|max:50',
+            'precio_min'   => 'nullable|numeric|min:0',
+            'precio_max'   => 'nullable|numeric|min:0',
+            'colores'      => 'nullable|array',
+            'colores.*'    => 'string|max:50',
+            'categorias'   => 'nullable|array',
+            'categorias.*' => 'integer',
         ]);
 
-        $filtros = array_filter($request->only(['precio_min', 'precio_max', 'colores']));
+        $filtros = array_filter($request->only(['precio_min', 'precio_max', 'colores', 'categorias']));
 
         $productos = $this->productoservice->indexPaginado(16, $filtros);
         $colores = $this->productoservice->coloresDisponibles();
-        $coloresSeleccionados = array_map('strtolower', $filtros['colores'] ?? []);
+        $categorias = $this->productoservice->categoriasDisponibles();
 
-        return view('Catalogo.index', compact('productos', 'filtros', 'colores', 'coloresSeleccionados'));
+        $coloresSeleccionados = array_map('strtolower', $filtros['colores'] ?? []);
+        $categoriasSeleccionadas = array_map('intval', $filtros['categorias'] ?? []);
+
+        return view('Catalogo.index', compact(
+            'productos', 'filtros', 'colores', 'coloresSeleccionados', 'categorias', 'categoriasSeleccionadas'
+        ));
     }
 
     public function show(Request $request, int $id)

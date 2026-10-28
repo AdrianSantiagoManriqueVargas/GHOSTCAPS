@@ -109,7 +109,32 @@
                 </div>
             @endif
 
-            {{-- Aquí irán Categoría y Marca --}}
+            {{-- Categoría --}}
+            @if ($categorias->isNotEmpty())
+                <div class="border-t border-gray-200 py-5">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-black">Categoría</h3>
+
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        @foreach ($categorias as $categoria)
+                            <label class="cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    name="categorias[]"
+                                    value="{{ $categoria->id }}"
+                                    class="peer sr-only"
+                                    @checked(in_array($categoria->id, $categoriasSeleccionadas))
+                                >
+
+                                <div class="rounded-full border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition peer-checked:border-black peer-checked:bg-black peer-checked:text-white">
+                                    {{ $categoria->nombre_categoria }}
+                                </div>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Aquí irá Marca --}}
 
             <button
                 type="submit"

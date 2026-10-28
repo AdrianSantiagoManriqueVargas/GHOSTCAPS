@@ -74,6 +74,14 @@
             </div>
         </div>
 
+        <div class="mb-6 flex items-center gap-3">
+            <input type="hidden" name="destacado" value="0">
+            <input type="checkbox" id="destacado" name="destacado" value="1" class="h-4 w-4" @checked(old('destacado'))>
+            <label for="destacado" class="text-sm font-semibold text-gray-700">
+                Destacar en el inicio
+                <span class="block text-xs font-normal text-gray-500">Su foto se usa como portada de su categoría.</span>
+            </label>
+
         <div class="mb-6">
             <label class="block mb-1 text-sm font-semibold text-gray-700">Imagenes</label>
             <input name="imagenes[]" type="file" multiple class="w-full border rounded px-3 py-2">

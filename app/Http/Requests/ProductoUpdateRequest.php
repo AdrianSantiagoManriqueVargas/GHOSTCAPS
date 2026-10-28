@@ -27,6 +27,7 @@ class ProductoUpdateRequest extends FormRequest
             'colores.0.codigo_hex' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'colores.1.nombre_color' => 'nullable|string|max:100',
             'colores.1.codigo_hex' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'destacado' => 'nullable|boolean',
         ];
     }
 }

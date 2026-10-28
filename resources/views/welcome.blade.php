@@ -53,18 +53,20 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             @foreach ($categoriasInicio as $categoria)
-                <a href="{{ route('catalogo.index') }}">
+                <a href="{{ route('catalogo.index', ['categorias' => [$categoria['id']]]) }}">
                     <div class="relative aspect-square overflow-hidden bg-gray-100 transition-all duration-100 ease-in-out hover:scale-105">
 
-                        @if (File::exists(public_path($categoria['imagen'])))
-                            <img src="{{ asset($categoria['imagen']) }}" alt="{{ $categoria['nombre'] }}" class="w-full h-full object-cover">
+                        @if ($categoria['imagen'])
+                            <img src="{{ $categoria['imagen'] }}" alt="{{ $categoria['nombre'] }}" class="w-full h-full object-cover">
                         @else
                             <p class="p-4 text-gray-400">Sin imagen</p>
                         @endif
 
                         <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                             <p class="text-md font-semibold text-white">{{ $categoria['nombre'] }}</p>
-                            <p class="text-sm text-gray-200">{{ $categoria['descripcion'] }}</p>
+                        @if ($categoria['descripcion'])
+                            <p class="line-clamp-2 text-sm text-gray-200">{{ $categoria['descripcion'] }}</p>
+                        @endif
                         </div>
 
                     </div>

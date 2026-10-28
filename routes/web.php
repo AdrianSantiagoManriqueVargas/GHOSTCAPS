@@ -10,30 +10,36 @@ use App\Http\Controllers\ColorProductoController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
+use App\Models\Categoria;
+use Illuminate\Support\Str;
 use App\Models;
 
 Route::get('/', function () {
 
-    $categoriasInicio = [
-        [
-            'nombre' => 'Gorras clásicas',
-            'descripcion' => 'Estilo para todos los días',
-            'imagen' => 'img/categorias/gorras-clasicas.jpg',
-            'fondo' => 'bg-stone-200',
-        ],
-        [
-            'nombre' => 'Gorras urbanas',
-            'descripcion' => 'Destaca con tu estilo',
-            'imagen' => 'img/categorias/gorras-urbanas.jpg',
-            'fondo' => 'bg-zinc-300',
-        ],
-        [
-            'nombre' => 'Ediciones especiales',
-            'descripcion' => 'Diseños que no pasan desapercibidos',
-            'imagen' => 'img/categorias/ediciones-especiales.jpg',
-            'fondo' => 'bg-neutral-200',
-        ],
-    ];
+    $categoriasInicio = Categoria::whereIn('id', Producto::select('id_categoria'))
+        ->orderBy('nombre_categoria')
+        ->get()
+        ->map(function ($categoria) {
+            $imagenPropia = 'img/categorias/' . Str::slug($categoria->nombre_categoria) . '.jpg';
+
+            $productoConImagen = Producto::with('imagen_producto')
+                ->where('id_categoria', $categoria->id)
+                ->whereHas('imagen_producto')
+                ->orderByDesc('destacado')
+                ->latest()
+                ->first();
+
+            $imagenProducto = $productoConImagen?->imagen_producto->first()?->url_imagen;
+
+            return [
+                'id' => $categoria->id,
+                'nombre' => $categoria->nombre_categoria,
+                'descripcion' => $categoria->descripcion_categoria,
+                'imagen' => File::exists(public_path($imagenPropia))
+                    ? asset($imagenPropia)
+                    : ($imagenProducto ? asset('storage/' . $imagenProducto) : null),
+            ];
+        });
 
     $destacados = Producto::with(['categoria', 'imagen_producto'])->latest()->take(8)->get();
 

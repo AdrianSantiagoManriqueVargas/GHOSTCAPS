@@ -116,4 +116,8 @@ class ProductoService{
     public function coloresDisponibles(){
         return $this->productorepository->coloresDisponibles();
     }
+
+    public function categoriasDisponibles(){
+        return $this->productorepository->categoriasDisponibles();
+    }
 }

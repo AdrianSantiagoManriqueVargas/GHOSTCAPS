@@ -16,7 +16,12 @@ class Producto extends Model
         'descripcion_producto',
         'precio',
         'stock',
-        'id_categoria'
+        'id_categoria',
+        'destacado'
+    ];
+
+    protected $casts = [
+        'destacado' => 'boolean',
     ];
 
     public function categoria(){

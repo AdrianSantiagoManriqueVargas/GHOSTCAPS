@@ -83,8 +83,8 @@
             <input type="hidden" name="destacado" value="0">
             <input type="checkbox" id="destacado" name="destacado" value="1" class="h-4 w-4" @checked(old('destacado', $producto->destacado))>
             <label for="destacado" class="text-sm font-semibold text-gray-700">
-                Destacar en el inicio
-                <span class="block text-xs font-normal text-gray-500">Su foto se usa como portada de su categoría.</span>
+                Portada de su categoría
+                <span class="block text-xs font-normal text-gray-500">Su foto se muestra en la tarjeta de su categoría en el inicio.</span>
             </label>
         </div>
 

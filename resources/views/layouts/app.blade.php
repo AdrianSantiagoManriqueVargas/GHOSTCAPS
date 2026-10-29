@@ -25,13 +25,13 @@
 </head>
 <body class="bg-white flex flex-col min-h-screen">
 
-    <nav class="sticky top-0 z-10 bg-black text-white grid grid-cols-3 items-center px-10 py-2">
+    <nav class="sticky top-0 z-20 grid grid-cols-[auto_1fr_auto] items-center bg-black px-4 py-2 text-white sm:grid-cols-3 sm:px-10">
 
-        <a href="{{ route('inicio') }}" class="justify-self-start hover:scale-125 transition-transform">
-            <img src="{{ asset('img/logo.png') }}" alt="GhostCaps" class="h-20">
+        <a href="{{ route('inicio') }}" class="justify-self-start transition-transform hover:scale-125">
+            <img src="{{ asset('img/logo.png') }}" alt="GhostCaps" class="h-12 sm:h-20">
         </a>
 
-        <div class="flex gap-6 justify-self-center text-lg">
+        <div class="flex gap-3 justify-self-center text-xs sm:gap-6 sm:text-lg">
             <a href="{{ route('inicio') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }} ">
                 INICIO
             </a>
@@ -43,7 +43,7 @@
             </a>
         </div>
 
-        <div class="justify-self-end relative hover:scale-125 transition-transform">
+        <div class="relative justify-self-end transition-transform hover:scale-125">
             <a href="{{ route('carrito.index') }}">
                 <img src="{{ asset('img/carrito.png') }}" alt="Carrito" class="h-8">
                 @if ($totalCarrito > 0)

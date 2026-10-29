@@ -7,67 +7,88 @@
 @section('contenido')
 
     {{-- BANNER PRINCIPAL --}}
-    <section class="relative w-full overflow-hidden bg-black">
+    <section class="max-w-[1850px] mx-auto px-4 sm:px-8 pt-4 sm:pt-6">
+        <div class="relative h-[50svh] min-h-[360px] max-h-[760px] overflow-hidden rounded-2xl bg-black sm:h-[70svh] sm:min-h-[420px]">
 
-        <img
-            src="{{ asset('img/banners/bannerbeta2.jpg') }}"
-            alt="Colección GhostCaps"
-            class="w-full h-auto block object-cover"
-        >
-
-        {{-- Oscurecido suave --}}
-        <div class="absolute inset-0 bg-black/25"></div>
-
-        <div class="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
-
-        <h1 class="sr-only">GhostCaps</h1>
-
-        @if (File::exists(public_path('img/logo-ghostcaps-banner.png')))
             <img
-                src="{{ asset('img/logo-ghostcaps-banner.png') }}"
-                alt="GhostCaps"
-                class="w-[280px] sm:w-[420px] lg:w-[520px]"
+                src="{{ asset('img/banners/bannerbeta2.jpg') }}"
+                alt="Colección GhostCaps"
+                class="absolute inset-0 h-full w-full object-cover object-center"
             >
-        @else
-            <p class="text-white">Falta el logo: img/logo-ghostcaps-banner.png</p>
-        @endif
 
-            <p class="-mt-2 text-sm italic text-white sm:-mt-4 sm:text-lg">
-                Vive en la cima.
-            </p>
+            {{-- Degradado: más oscuro abajo para que el texto se lea --}}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/40"></div>
 
-            <a
-                href="{{ route('catalogo.index') }}"
-                class="mt-6 border border-white/80 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white hover:text-black sm:mt-7 sm:px-8 sm:py-3.5 sm:text-sm"
-            >
-                Explorar catálogo
-            </a>
+            <div class="relative flex h-full flex-col items-center justify-center px-5 text-center">
+
+                <h1 class="sr-only">GhostCaps</h1>
+
+                @if (File::exists(public_path('img/logo-ghostcaps-banner.png')))
+                    <img
+                        src="{{ asset('img/logo-ghostcaps-banner.png') }}"
+                        alt="GhostCaps"
+                        class="w-[260px] drop-shadow-2xl sm:w-[400px] lg:w-[520px]"
+                    >
+                @else
+                    <p class="text-white">Falta el logo: img/logo-ghostcaps-banner.png</p>
+                @endif
+
+                <p class="mt-4 text-xs uppercase tracking-[0.4em] text-gray-200 sm:text-sm">
+                    Vive en la cima
+                </p>
+
+                <a
+                    href="{{ route('catalogo.index') }}"
+                    class="mt-8 rounded-full border border-white bg-white px-8 py-3 text-sm font-bold uppercase tracking-widest text-black transition hover:bg-black hover:text-white"
+                >
+                    Explorar catálogo
+                </a>
+
+            </div>
+
+            <div class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 animate-bounce text-2xl text-white/80 sm:block">↓</div>
 
         </div>
     </section>
 
     {{-- CATEGORÍAS DESTACADAS --}}
-    <section class="max-w-7xl mx-auto px-4 py-10">
+    <section class="max-w-[1500px] mx-auto px-4 sm:px-8 py-10">
 
         <h2 class="text-xl text-black mb-4 font-marker">Explora por categoría</h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             @foreach ($categoriasInicio as $categoria)
-                <a href="{{ route('catalogo.index', ['categorias' => [$categoria['id']]]) }}">
-                    <div class="relative aspect-square overflow-hidden bg-gray-100 transition-all duration-100 ease-in-out hover:scale-105">
+                <a
+                    href="{{ route('catalogo.index', ['categorias' => [$categoria['id']]]) }}"
+                    class="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100"
+                >
 
-                        @if ($categoria['imagen'])
-                            <img src="{{ $categoria['imagen'] }}" alt="{{ $categoria['nombre'] }}" class="w-full h-full object-cover">
-                        @else
-                            <p class="p-4 text-gray-400">Sin imagen</p>
-                        @endif
+                    @if ($categoria['imagen'])
+                        <img
+                            src="{{ $categoria['imagen'] }}"
+                            alt="{{ $categoria['nombre'] }}"
+                            class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        >
+                    @else
+                        <p class="flex h-full items-center justify-center text-gray-400">Sin imagen</p>
+                    @endif
 
-                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                            <p class="text-md font-semibold text-white">{{ $categoria['nombre'] }}</p>
+                    <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 pt-16 text-white sm:p-5 sm:pt-20">
+
+                        <p class="font-marker text-lg leading-tight tracking-wide sm:text-2xl">
+                            {{ $categoria['nombre'] }}
+                        </p>
+
                         @if ($categoria['descripcion'])
-                            <p class="line-clamp-2 text-sm text-gray-200">{{ $categoria['descripcion'] }}</p>
+                            <p class="mt-1 hidden line-clamp-2 text-sm text-gray-200 sm:block">
+                                {{ $categoria['descripcion'] }}
+                            </p>
                         @endif
-                        </div>
+
+                        <p class="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest sm:mt-3 sm:text-xs">
+                            Ver colección
+                            <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                        </p>
 
                     </div>
                 </a>
@@ -76,23 +97,23 @@
 
     </section>
 
-    <section class="w-full py-10">
-        <div class="relative w-full overflow-hidden shadow-md">
+    <section class="max-w-[1500px] mx-auto px-4 sm:px-8 py-10">
+        <div class="relative min-h-[420px] w-full overflow-hidden rounded-2xl shadow-md sm:min-h-0">
 
-            @if (File::exists(public_path('img/banners/adidasbanner.jpg')))
-                <img src="{{ asset('img/banners/adidasbanner.jpg') }}" alt="Colección destacada GhostCaps" class="w-full h-full object-cover">
+            @if (File::exists(public_path('img/banners/LOONEY-PC.webp')))
+                <img src="{{ asset('img/banners/LOONEY-PC.webp') }}" alt="Colección destacada GhostCaps" class="absolute inset-0 h-full w-full object-cover object-center sm:static sm:h-auto">
             @else
                 <p class="p-4 text-gray-400">Sin imagen</p>
             @endif
 
-            <div class="absolute inset-0 bg-black/30 flex flex-col items-center justify-end pb-24 text-center text-white">
-                <p class="text-base uppercase tracking-widest">Colección destacada</p>
+            <div class="absolute inset-0 flex flex-col items-start justify-end bg-gradient-to-t from-black/70 via-black/20 to-transparent p-5 text-left text-white sm:p-10 lg:p-14">
+                <p class="text-xs uppercase tracking-[0.2em] sm:text-base lg:text-lg">Colección destacada</p>
 
-                <h2 class="text-4xl font-bold">Gorras Adidas</h2>
+                <h2 class="mt-2 text-2xl font-black sm:text-4xl lg:text-5xl">Gorras Looney Tunes</h2>
 
                 <a
-                    href="{{ route('catalogo.index') }}"
-                    class="mt-4 border border-white/80 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white hover:text-black hover:scale-125"
+                    href="{{ route('catalogo.index', ['categorias' => [3]]) }}"
+                    class="mt-4 rounded-full border border-white bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-black transition hover:bg-black hover:text-white sm:mt-6 sm:px-8 sm:text-sm"
                 >
                     Ver colección
                 </a>
@@ -102,33 +123,59 @@
     </section>
 
     {{-- BLOQUE EDITORIAL: COLECCIÓN ESPECIAL --}}
-    <section class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+    {{-- COLECCIONES --}}
+    <section class="max-w-[1500px] mx-auto px-4 sm:px-8 py-10">
+        <div class="grid grid-cols-2 lg:grid-cols-4 overflow-hidden rounded-2xl">
 
-        <div>
-            @if (File::exists(public_path('img/banners/goorinbros2.jpg')))
-                <img src="{{ asset('img/banners/goorinbros2.jpg') }}" alt="Gorras de diseños especiales" class="w-full h-auto">
-            @else
-                <p class="p-4 text-gray-400">Sin imagen</p>
-            @endif
-        </div>
+            <a href="{{ route('catalogo.index', ['categorias' => [1]]) }}" class="group relative block aspect-[4/5] overflow-hidden bg-neutral-900">
+                <img src="{{ asset('img/banners/MULTIMARCAS.webp') }}" alt="Multimarcas" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
 
-        <div class="flex flex-col justify-center text-center md:text-left max-w-md mx-auto h-full">
-            <p class="text-base uppercase tracking-[0.3em] text-gray-500">Diseños y personalidad</p>
-
-            <h2 class="text-5xl sm:text-6xl font-black text-black mt-5 leading-tight">Gorras Goorin Bros</h2>
-
-            <p class="mt-6 text-lg sm:text-xl text-gray-600 leading-8">
-                Descubre diseños llamativos, estampados únicos y gorras que destacan por sus detalles.
-            </p>
-
-            <a
-                href="{{ route('catalogo.index') }}"
-                class="mt-10 inline-block border border-black px-8 py-3.5 text-sm font-bold uppercase tracking-widest text-black transition hover:bg-black hover:text-white"
-            >
-                Ver colección
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-16 text-white">
+                    <p class="text-xl font-extrabold uppercase tracking-wide">Multimarcas</p>
+                    <p class="mt-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                        Ver colección
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </p>
+                </div>
             </a>
-        </div>
 
+            <a href="{{ route('catalogo.index', ['categorias' => [1]]) }}" class="group relative block aspect-[4/5] overflow-hidden bg-neutral-900">
+                <img src="{{ asset('img/banners/LICENCIAS.webp') }}" alt="Licencias" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-16 text-white">
+                    <p class="text-xl font-extrabold uppercase tracking-wide">Licencias</p>
+                    <p class="mt-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                        Ver colección
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </p>
+                </div>
+            </a>
+
+            <a href="{{ route('catalogo.index', ['categorias' => [1]]) }}" class="group relative block aspect-[4/5] overflow-hidden bg-neutral-900">
+                <img src="{{ asset('img/banners/ROCKINLIFE.webp') }}" alt="Rockin Life" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-16 text-white">
+                    <p class="text-xl font-extrabold uppercase tracking-wide">Rockin Life</p>
+                    <p class="mt-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                        Ver colección
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </p>
+                </div>
+            </a>
+
+            <a href="{{ route('catalogo.index', ['categorias' => [1]]) }}" class="group relative block aspect-[4/5] overflow-hidden bg-neutral-900">
+                <img src="{{ asset('img/banners/jg.webp') }}" alt="JG" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
+
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-16 text-white">
+                    <p class="text-xl font-extrabold uppercase tracking-wide">JG</p>
+                    <p class="mt-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                        Ver colección
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </p>
+                </div>
+            </a>
+
+        </div>
     </section>
 
     {{-- PROPUESTA DE VALOR --}}

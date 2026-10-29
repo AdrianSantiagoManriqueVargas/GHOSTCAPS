@@ -12,7 +12,7 @@
     <input type="checkbox" id="panel-filtros" class="peer hidden">
 
     {{-- Botón fijo debajo del navbar --}}
-    <div class="sticky top-24 z-[5] mb-6 flex items-center gap-4 border-b border-gray-200 bg-white py-3">
+    <div class="sticky top-16 sm:top-24 z-[5] mb-6 flex items-center gap-4 border-b border-gray-200 bg-white py-3">
 
         <label
             for="panel-filtros"
@@ -178,16 +178,6 @@
                 </div>
 
             </a>
-
-            {{-- INTERRUPCIÓN DE LA CUADRÍCULA CON EL BANNER PUBLICITARIO --}}
-            {{-- $loop->iteration cuenta el producto actual. Si es 8 (2 filas de 4), inserta el banner --}}
-            @if ($loop->iteration == 8)
-                <div class="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-full my-6">
-                    <div class="w-full h-144 overflow-hidden relative shadow-md">
-                        <img src="{{ asset('img/banners/banner-gorras.png') }}" alt="Modelado de gorras" class="w-full h-full object-cover">
-                    </div>
-                </div>
-            @endif
 
         @endforeach
     </div>

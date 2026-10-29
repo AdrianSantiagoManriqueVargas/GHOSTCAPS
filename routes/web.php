@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductoController;
 use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use App\Models;
 
 Route::get('/', function () {

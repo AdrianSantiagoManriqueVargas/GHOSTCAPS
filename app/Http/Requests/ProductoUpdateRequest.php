@@ -16,7 +16,7 @@ class ProductoUpdateRequest extends FormRequest
     {
         return [
             'nombre_producto' => 'required|string|max:100',
-            'descripcion_producto' => 'required|string|max:255',
+            'descripcion_producto' => 'required|string|max:1000',
             'precio' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'id_categoria' => 'required|exists:categoria,id',

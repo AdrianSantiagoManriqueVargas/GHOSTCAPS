@@ -41,6 +41,11 @@
             <a href="{{ route('catalogo.index') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('catalogo.index') ? 'text-red-500'   : 'text-white' }}">
                 CATALOGO
             </a>
+            @auth
+                <a href="{{ route('gestion.index') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->is('gestion*') ? 'text-red-500' : 'text-white' }}">
+                    GESTIÓN
+                </a>
+            @endauth
         </div>
 
         <div class="relative justify-self-end transition-transform hover:scale-125">
@@ -92,6 +97,17 @@
 
         <p class="mt-10 text-center text-xs text-gray-500">
             © {{ date('Y') }} GhostCaps. Todos los derechos reservados.
+
+            @guest
+                <a href="{{ route('login') }}" class="hover:text-gray-300">·</a>
+            @endguest
+
+            @auth
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="underline hover:text-gray-300">Salir</button>
+                </form>
+            @endauth
         </p>
     </footer>
 

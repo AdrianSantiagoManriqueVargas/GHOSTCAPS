@@ -163,7 +163,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('catalogo.index', ['categorias' => [1]]) }}" class="group relative block aspect-[4/5] overflow-hidden bg-neutral-900">
+            <a href="{{ route('catalogo.index', ['categorias' => [5]]) }}" class="group relative block aspect-[4/5] overflow-hidden bg-neutral-900">
                 <img src="{{ asset('img/banners/jg.webp') }}" alt="JG" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
 
                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-16 text-white">

@@ -13,6 +13,7 @@ use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use App\Http\Controllers\AuthController;
 use App\Models;
 
 Route::get('/', function () {
@@ -49,14 +50,22 @@ Route::get('/', function () {
 
 // RUTAS PARA LA GESTION DE PRODUCTOS
 
-Route::prefix('gestion')->group(function () {
-
+Route::middleware('auth')->prefix('gestion')->group(function () {
+    
     Route::get('/', function () {
         return view('gestion.index', [
-            'totalProductos' => \App\Models\Producto::count(),
-            'totalCategorias' => \App\Models\Categoria::count(),
-            'totalClientes' => \App\Models\Cliente::count(),
-            'totalPedidos' => \App\Models\Pedido::count(),
+            'totalProductos'    => \App\Models\Producto::count(),
+            'totalCategorias'   => \App\Models\Categoria::count(),
+            'totalClientes'     => \App\Models\Cliente::count(),
+            'totalPedidos'      => \App\Models\Pedido::count(),
+            'productosStockBajo' => \App\Models\Producto::with(['imagen_producto', 'categoria'])
+                                        ->where('stock', '<=', 2)
+                                        ->orderBy('stock')
+                                        ->get(),
+            'ultimosPedidos'    => \App\Models\Pedido::with('cliente')
+                                        ->latest()
+                                        ->take(5)
+                                        ->get(),
         ]);
     })->name('gestion.index');
 
@@ -86,3 +95,9 @@ Route::post('carrito/comprar/{producto}', [CarritoController::class, 'comprarAho
 
 Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.create');
 Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+// AUTH
+
+Route::get('/login', [AuthController::class, 'mostrarLogin'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'login'])->name('login.entrar')->middleware('guest');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');

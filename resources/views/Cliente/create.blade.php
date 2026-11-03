@@ -6,66 +6,148 @@
 
 @section('contenido')
 
-<div class="bg-white rounded-lg shadow-sm border p-6 max-w-xl mx-auto">
+{{-- NAVEGACIÓN Y ENCABEZADO --}}
+<div class="mb-8 max-w-3xl mx-auto">
+    <a href="{{ route('cliente.index') }}" 
+       class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition-colors mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Volver a clientes
+    </a>
+    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Nuevo cliente</h1>
+    <p class="text-base text-gray-500 mt-1">Registra la información personal y datos de contacto del cliente.</p>
+</div>
 
-    <h2 class="text-xl font-bold text-gray-800 mb-5">Nuevo Cliente</h2>
-
-    @if($errors->any())
-        <div class="bg-red-100 border border-red-300 text-red-800 rounded p-4 mb-5">
-            <ul class="list-disc list-inside">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+{{-- ALERTAS DE ERROR --}}
+@if ($errors->any())
+    <div class="max-w-3xl mx-auto mb-6 p-4 rounded-2xl bg-red-50 border border-red-200/70 text-red-800 text-sm">
+        <div class="flex items-center gap-2 font-semibold mb-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            Por favor corrige los siguientes errores:
         </div>
-    @endif
+        <ul class="list-disc list-inside text-xs text-red-700 space-y-0.5 ml-1">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-    <form action="{{ route('cliente.store') }}" method="post">
+{{-- TARJETA DEL FORMULARIO --}}
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 max-w-3xl mx-auto">
+
+    <form action="{{ route('cliente.store') }}" method="POST" class="space-y-6">
         @csrf
 
-        <div class="mb-4">
-            <label class="block mb-1 text-sm font-semibold text-gray-700">Nombre</label>
-            <input name="nombre_cliente" value="{{ old('nombre_cliente') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
+        {{-- Nombre Completo --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nombre completo</label>
+            <input type="text"
+                   name="nombre_cliente"
+                   value="{{ old('nombre_cliente') }}"
+                   placeholder="Ej: Carlos Ramírez"
+                   class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all @error('nombre_cliente') border-red-500 @enderror">
+            @error('nombre_cliente')
+                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="mb-4">
-            <label class="block mb-1 text-sm font-semibold text-gray-700">Telefono</label>
-            <input name="telefono_cliente" value="{{ old('telefono_cliente') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
+        {{-- Teléfono y Correo --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Teléfono / WhatsApp</label>
+                <input type="text"
+                       name="telefono_cliente"
+                       value="{{ old('telefono_cliente') }}"
+                       placeholder="Ej: 3123456789"
+                       class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all @error('telefono_cliente') border-red-500 @enderror">
+                @error('telefono_cliente')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Correo electrónico</label>
+                <input type="email"
+                       name="correo_cliente"
+                       value="{{ old('correo_cliente') }}"
+                       placeholder="carlos@correo.com"
+                       class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all @error('correo_cliente') border-red-500 @enderror">
+                @error('correo_cliente')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label class="block mb-1 text-sm font-semibold text-gray-700">Correo</label>
-            <input name="correo_cliente" type="email" value="{{ old('correo_cliente') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
+        {{-- Tipo y Número de Documento --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Tipo de doc.</label>
+                <select name="tipo_documento"
+                        class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all @error('tipo_documento') border-red-500 @enderror">
+                    <option value="CC" @selected(old('tipo_documento') == 'CC')>Cédula (CC)</option>
+                    <option value="TI" @selected(old('tipo_documento') == 'TI')>Tarjeta Identidad (TI)</option>
+                    <option value="CE" @selected(old('tipo_documento') == 'CE')>Cédula Extranjería (CE)</option>
+                    <option value="PP" @selected(old('tipo_documento') == 'PP')>Pasaporte (PP)</option>
+                </select>
+                @error('tipo_documento')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Número de documento</label>
+                <input type="text"
+                       name="numero_documento"
+                       value="{{ old('numero_documento') }}"
+                       placeholder="1098765432"
+                       class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all font-mono @error('numero_documento') border-red-500 @enderror">
+                @error('numero_documento')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label class="block mb-1 text-sm font-semibold text-gray-700">Tipo de documento</label>
-            <select name="tipo_documento" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
-                <option value="CC" @selected(old('tipo_documento') == 'CC')>CC</option>
-                <option value="TI" @selected(old('tipo_documento') == 'TI')>TI</option>
-                <option value="CE" @selected(old('tipo_documento') == 'CE')>CE</option>
-                <option value="PP" @selected(old('tipo_documento') == 'PP')>PP</option>
-            </select>
+        {{-- Dirección y Ciudad --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Ciudad</label>
+                <input type="text"
+                       name="ciudad"
+                       value="{{ old('ciudad') }}"
+                       placeholder="Ej: Bogotá, Medellín, Cali..."
+                       class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all @error('ciudad') border-red-500 @enderror">
+                @error('ciudad')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Dirección de entrega</label>
+                <input type="text"
+                       name="direccion"
+                       value="{{ old('direccion') }}"
+                       placeholder="Calle 12 # 34 - 56"
+                       class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all @error('direccion') border-red-500 @enderror">
+                @error('direccion')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label class="block mb-1 text-sm font-semibold text-gray-700">Numero de documento</label>
-            <input name="numero_documento" value="{{ old('numero_documento') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
-        </div>
-
-        <div class="mb-4">
-            <label class="block mb-1 text-sm font-semibold text-gray-700">Direccion</label>
-            <input name="direccion" value="{{ old('direccion') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
-        </div>
-
-        <div class="mb-6">
-            <label class="block mb-1 text-sm font-semibold text-gray-700">Ciudad</label>
-            <input name="ciudad" value="{{ old('ciudad') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
-        </div>
-
-        <div class="flex items-center gap-4">
-            <button type="submit" class="bg-black text-white px-5 py-2 rounded hover:bg-gray-800 transition-colors">Guardar</button>
-            <a href="{{ route('cliente.index') }}" class="text-gray-600 hover:underline">Cancelar</a>
+        {{-- BOTONES DE ACCIÓN --}}
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+            <a href="{{ route('cliente.index') }}"
+               class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+                Cancelar
+            </a>
+            <button type="submit"
+                    class="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm shadow-red-600/20 hover:shadow-md">
+                Guardar cliente
+            </button>
         </div>
 
     </form>

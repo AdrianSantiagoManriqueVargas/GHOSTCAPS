@@ -120,4 +120,9 @@ class ProductoService{
     public function categoriasDisponibles(){
         return $this->productorepository->categoriasDisponibles();
     }
+
+    public function productosRelacionados(Producto $producto)
+    {
+        return $this->productorepository->relacionados($producto);
+    }
 }

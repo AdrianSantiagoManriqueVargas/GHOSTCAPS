@@ -24,17 +24,22 @@ class PedidoService
         $mensaje = "Hola, quiero confirmar mi pedido:\n\n";
 
         foreach ($items as $item) {
-            $mensaje .= "- {$item['cantidad']}x {$item['producto']->nombre_producto} (\${$item['subtotal']})\n";
+            $mensaje .= "- {$item['cantidad']}x {$item['producto']->nombre_producto} ($" . number_format($item['subtotal'], 0, ',', '.') . ")\n";
         }
 
-        $mensaje .= "\nSubtotal: \${$subtotal}\n";
-        $mensaje .= "Envio: \${$costoEnvio}\n";
-        $mensaje .= "Total: \${$total}\n\n";
+        $mensaje .= "\nSubtotal: $" . number_format($subtotal, 0, ',', '.') . "\n";
+        $mensaje .= "Envio: $" . number_format($costoEnvio, 0, ',', '.') . "\n";
+        $mensaje .= "Total: $" . number_format($total, 0, ',', '.') . "\n\n";
         $mensaje .= "Datos del cliente:\n";
         $mensaje .= "Nombre: {$cliente->nombre_cliente}\n";
         $mensaje .= "Telefono: {$cliente->telefono_cliente}\n";
         $mensaje .= "Direccion: {$cliente->direccion}, {$cliente->ciudad}\n";
 
         return $mensaje;
+    }
+
+    public function buscarConDetalle(int $id)
+    {
+        return $this->pedidorepository->buscarConDetalle($id);
     }
 }

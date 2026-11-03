@@ -24,7 +24,14 @@ class CheckoutStoreRequest extends FormRequest
             'tipo_documento' => 'required|in:CC,TI,CE,PP',
             'numero_documento' => 'required|string|max:20',
             'direccion' => 'required|string|max:255',
-            'ciudad' => 'required|string|max:255',
+            'ciudad' => 'required|string|max:100',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('otra_ciudad')) {
+            $this->merge(['ciudad' => $this->input('otra_ciudad')]);
+        }
     }
 }

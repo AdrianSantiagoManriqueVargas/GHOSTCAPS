@@ -15,7 +15,7 @@
         <div class="lg:col-span-2">
 
             <h2 class="text-2xl font-bold text-gray-900 mb-1">Datos para tu pedido</h2>
-            <p class="text-sm text-gray-500 mb-6">Completa tus datos y te redirigiremos a WhatsApp para confirmar la compra.</p>
+            <p class="text-sm text-gray-500 mb-6">Completa tus datos y revisa tu pedido antes de enviarlo por WhatsApp.</p>
 
             @if($errors->any())
                 <div class="bg-red-100 border border-red-300 text-red-800 rounded p-4 mb-6">
@@ -66,8 +66,25 @@
                 </div>
 
                 <div>
-                    <label class="block mb-1 text-sm font-semibold text-gray-700">Ciudad</label>
-                    <input name="ciudad" value="{{ old('ciudad') }}" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
+                    <p class="mb-2 text-sm font-semibold text-gray-700">Ciudad</p>
+
+                    <div class="flex flex-wrap gap-2">
+                        @foreach ($ciudades as $ciudad)
+                            <label>
+                                <input type="radio" name="ciudad" value="{{ $ciudad }}" class="peer hidden" @checked(old('ciudad') == $ciudad)>
+                                <span class="block cursor-pointer rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-black peer-checked:border-black peer-checked:bg-black peer-checked:text-white">
+                                    {{ $ciudad }}
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+
+                    <input name="otra_ciudad" value="{{ old('otra_ciudad') }}" placeholder="¿Otra ciudad? Escríbela aquí"
+                        class="mt-3 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black">
+
+                    <p class="mt-1 text-xs text-gray-500">
+                        Si tu ciudad no aparece, escríbela y te confirmaremos el costo de envío por WhatsApp.
+                    </p>
                 </div>
 
             </div>
@@ -117,13 +134,9 @@
                     <span>${{ number_format($total, 0, ',', '.') }}</span>
                 </div>
 
-                <button type="submit" class="w-full bg-[#1c9e4c] text-white py-2 rounded font-bold hover:bg-[#0e5829] transition-colors flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 fill-white">
-                        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 1.67c4.56 0 8.26 3.71 8.26 8.26s-3.7 8.26-8.26 8.26c-1.52 0-3-.42-4.29-1.21l-.31-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.36c0-4.56 3.71-8.26 8.26-8.26zm4.52 10.49c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.06 0 1.21.89 2.38 1.01 2.54.12.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.1-.23-.16-.48-.29z"/>
-                    </svg>
-                    Enviar pedido por WhatsApp
+                <button type="submit" class="w-full bg-black text-white py-3 rounded font-bold hover:bg-gray-800 transition-colors">
+                    Confirmar pedido
                 </button>
-
             </div>
         </div>
 

@@ -37,6 +37,7 @@ class CheckoutController extends Controller
             'subtotal' => $subtotal,
             'costoEnvio' => $costoEnvio,
             'total' => $total,
+            'ciudades' => config('tienda.ciudades'),
         ]);
     }
 
@@ -84,8 +85,24 @@ class CheckoutController extends Controller
 
         $this->carritoservice->vaciar();
 
-        $numeroWhatsapp = config('services.whatsapp.numero');
+        session(['pedido_confirmado' => $pedido->id]);
 
-        return redirect()->away('https://wa.me/' . $numeroWhatsapp . '?text=' . urlencode($pedido->mensaje_whatsapp));
+        return redirect()->route('checkout.resumen');
+    }
+
+    public function resumen()
+    {
+        $idPedido = session('pedido_confirmado');
+
+        if (!$idPedido) {
+            return redirect()->route('inicio');
+        }
+
+        $pedido = $this->pedidoservice->buscarConDetalle($idPedido);
+
+        $numeroWhatsapp = config('services.whatsapp.numero');
+        $linkWhatsapp = 'https://wa.me/' . $numeroWhatsapp . '?text=' . rawurlencode($pedido->mensaje_whatsapp);
+
+        return view('checkout.resumen', compact('pedido', 'linkWhatsapp'));
     }
 }

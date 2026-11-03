@@ -9,6 +9,10 @@
 
         <h1 class="mb-6 text-center font-marker text-3xl">Ingresar</h1>
 
+        <p class="mb-6 rounded-lg bg-gray-100 px-4 py-3 text-center text-sm text-gray-600">
+            Este acceso es solo para el administrador de GhostCaps. Si eres cliente, no necesitas iniciar sesión para comprar.
+        </p>
+
         <form method="POST" action="{{ route('login.entrar') }}" class="space-y-4">
             @csrf
 

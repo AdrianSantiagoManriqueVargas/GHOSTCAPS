@@ -25,40 +25,67 @@
 </head>
 <body class="bg-white flex flex-col min-h-screen">
 
-    <nav class="sticky top-0 z-20 grid grid-cols-[auto_1fr_auto] items-center bg-black px-4 py-2 text-white sm:grid-cols-3 sm:px-10">
+    <nav class="sticky top-0 z-20 bg-black text-white">
+        <div class="grid grid-cols-[auto_1fr_auto] items-center px-4 py-2 sm:grid-cols-3 sm:px-10">
 
-        <a href="{{ route('inicio') }}" class="justify-self-start transition-transform hover:scale-125">
-            <img src="{{ asset('img/logo.png') }}" alt="GhostCaps" class="h-12 sm:h-20">
-        </a>
+            {{-- Casilla invisible que controla el menú en móvil --}}
+            <input type="checkbox" id="menu-movil" class="peer hidden">
 
-        <div class="flex gap-3 justify-self-center text-xs sm:gap-6 sm:text-lg">
-            <a href="{{ route('inicio') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }} ">
-                INICIO
+            <a href="{{ route('inicio') }}" class="justify-self-start transition-transform hover:scale-125">
+                <img src="{{ asset('img/logo.png') }}" alt="GhostCaps" class="h-12 sm:h-20">
             </a>
-            <a href="{{ route('nosotros') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('nosotros') ? 'text-red-500' : 'text-white' }} ">
-                NOSOTROS
-            </a>
-            <a href="{{ route('catalogo.index') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->routeIs('catalogo.index') ? 'text-red-500'   : 'text-white' }}">
-                CATALOGO
-            </a>
-            @auth
-                <a href="{{ route('gestion.index') }}" class="font-bold tracking-wider transition-colors hover:text-red-400 {{ request()->is('gestion*') ? 'text-red-500' : 'text-white' }}">
-                    GESTIÓN
+
+            {{-- Links: lista desplegable en móvil, fila centrada en pantalla grande --}}
+            <div class="order-last col-span-full mt-2 hidden flex-col border-t border-white/20 peer-checked:flex sm:order-none sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:mt-0 sm:flex sm:flex-row sm:justify-self-center sm:gap-6 sm:border-0">
+
+                <a href="{{ route('inicio') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }}">
+                    INICIO
                 </a>
-            @endauth
-        </div>
+                <a href="{{ route('nosotros') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('nosotros') ? 'text-red-500' : 'text-white' }}">
+                    NOSOTROS
+                </a>
+                <a href="{{ route('catalogo.index') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('catalogo.index') ? 'text-red-500' : 'text-white' }}">
+                    CATALOGO
+                </a>
+                @auth
+                    <a href="{{ route('gestion.index') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->is('gestion*') ? 'text-red-500' : 'text-white' }}">
+                        GESTIÓN
+                    </a>
+                @endauth
 
-        <div class="relative justify-self-end transition-transform hover:scale-125">
-            <a href="{{ route('carrito.index') }}">
-                <img src="{{ asset('img/carrito.png') }}" alt="Carrito" class="h-8">
-                @if ($totalCarrito > 0)
-                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {{ $totalCarrito }}
-                    </span>
-                @endif
-            </a>
-        </div>
+            </div>
 
+            {{-- Usuario + carrito + botón de las 3 rayitas --}}
+            <div class="col-start-3 flex items-center gap-4 justify-self-end">
+
+                @guest
+                    <a href="{{ route('login') }}" title="Acceso administrador" aria-label="Acceso administrador" class="transition-transform hover:scale-125">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </a>
+                @endguest
+
+                <div class="relative transition-transform hover:scale-125">
+                    <a href="{{ route('carrito.index') }}">
+                        <img src="{{ asset('img/carrito.png') }}" alt="Carrito" class="h-8">
+                        @if ($totalCarrito > 0)
+                            <span class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                                {{ $totalCarrito }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
+
+                <label for="menu-movil" class="cursor-pointer sm:hidden" aria-label="Abrir menú">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </label>
+
+            </div>
+
+        </div>
     </nav>
 
     <main class="flex-1">
@@ -78,7 +105,7 @@
             <div>
                 <h3 class="font-marker text-xl text-red-500 tracking-wide">Contacto</h3>
                 <div class="mt-3 space-y-1 text-gray-300">
-                    <p>contacto@gmail.com</p>
+                    <p>ghostcaps@gmail.com</p>
                     <p>+57 3172126545</p>
                     <p>+57 3112323435</p>
                 </div>
@@ -97,17 +124,6 @@
 
         <p class="mt-10 text-center text-xs text-gray-500">
             © {{ date('Y') }} GhostCaps. Todos los derechos reservados.
-
-            @guest
-                <a href="{{ route('login') }}" class="hover:text-gray-300">·</a>
-            @endguest
-
-            @auth
-                <form method="POST" action="{{ route('logout') }}" class="inline">
-                    @csrf
-                    <button type="submit" class="underline hover:text-gray-300">Salir</button>
-                </form>
-            @endauth
         </p>
     </footer>
 

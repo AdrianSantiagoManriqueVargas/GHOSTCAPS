@@ -43,9 +43,10 @@ class CatalogoController extends Controller
     {
         $producto = $this->productoservice->edit($id);
         $variantesColor = $this->productoservice->variantesColor($producto);
+        $relacionados = $this->productoservice->productosRelacionados($producto);
         $indice = (int) $request->query('img', 0);
         $imagenInfo = $this->productoservice->obtenerImagenActual($producto, $indice);
 
-        return view('catalogo.producto', array_merge(compact('producto', 'variantesColor'), $imagenInfo));
+        return view('catalogo.producto', array_merge(compact('producto', 'variantesColor', 'relacionados'), $imagenInfo));
     }
 }

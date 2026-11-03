@@ -10,4 +10,9 @@ class PedidoRepository
     {
         return Pedido::create($datosPedido);
     }
+
+    public function buscarConDetalle(int $id)
+    {
+        return Pedido::with(['cliente', 'detalle_pedido.producto.imagen_producto'])->findOrFail($id);
+    }
 }

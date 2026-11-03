@@ -95,6 +95,7 @@ Route::post('carrito/comprar/{producto}', [CarritoController::class, 'comprarAho
 
 Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.create');
 Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('checkout/resumen', [CheckoutController::class, 'resumen'])->name('checkout.resumen');
 
 // AUTH
 

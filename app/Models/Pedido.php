@@ -22,6 +22,6 @@ class Pedido extends Model
     }
 
     public function detalle_pedido(){
-        return $this->hasMany(DetallePedido::class);
+        return $this->hasMany(DetallePedido::class, 'id_pedido');
     }
 }

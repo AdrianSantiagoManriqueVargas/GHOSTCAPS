@@ -93,4 +93,27 @@ class ProductoRepository{
             ->sortBy(fn ($color) => strtolower($color->nombre_color))
             ->values();
     }
+
+    public function relacionados(Producto $producto, int $cantidad = 4)
+    {
+        $relacionados = Producto::with(['categoria', 'imagen_producto'])
+            ->where('id_categoria', $producto->id_categoria)
+            ->where('id', '!=', $producto->id)
+            ->inRandomOrder()
+            ->take($cantidad)
+            ->get();
+
+        if ($relacionados->count() < $cantidad) {
+            $otros = Producto::with(['categoria', 'imagen_producto'])
+                ->where('id', '!=', $producto->id)
+                ->whereNotIn('id', $relacionados->pluck('id'))
+                ->latest()
+                ->take($cantidad - $relacionados->count())
+                ->get();
+
+            $relacionados = $relacionados->concat($otros);
+        }
+
+        return $relacionados;
+    }
 }

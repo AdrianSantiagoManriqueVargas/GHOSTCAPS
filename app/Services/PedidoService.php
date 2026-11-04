@@ -42,4 +42,14 @@ class PedidoService
     {
         return $this->pedidorepository->buscarConDetalle($id);
     }
+
+    public function indexPaginado(int $pagina = 10, ?string $estado = null)
+    {
+        return $this->pedidorepository->indexPaginado($pagina, $estado);
+    }
+
+    public function actualizarEstado(int $id, string $estado)
+    {
+        return $this->pedidorepository->actualizarEstado($id, $estado);
+    }
 }

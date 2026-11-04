@@ -21,4 +21,11 @@ class Cliente extends Model
     public function pedido(){
         return $this->hasMany(Pedido::class);
     }
+
+    public function getTelefonoWhatsappAttribute(): string
+    {
+        $numero = preg_replace('/\D/', '', $this->telefono_cliente);
+
+        return strlen($numero) === 10 ? '57' . $numero : $numero;
+    }
 }

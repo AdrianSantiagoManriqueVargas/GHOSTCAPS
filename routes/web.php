@@ -9,6 +9,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ColorProductoController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PedidoController;
 use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Support\Str;
@@ -74,6 +75,11 @@ Route::middleware('auth')->prefix('gestion')->group(function () {
     Route::delete('imagenproducto/{id}', [ImagenProductoController::class, 'destroy'])->name('imagenproducto.destroy');
     Route::delete('colorproducto/{id}', [ColorProductoController::class, 'destroy'])->name('colorproducto.destroy');
     Route::resource('cliente', ClienteController::class);
+
+    // PEDIDOS
+    Route::get('pedido', [PedidoController::class, 'index'])->name('pedido.index');
+    Route::get('pedido/{id}', [PedidoController::class, 'show'])->name('pedido.show');
+    Route::patch('pedido/{id}/estado', [PedidoController::class, 'updateEstado'])->name('pedido.updateEstado');
 });
 
 // RUTAS PUBLICAS

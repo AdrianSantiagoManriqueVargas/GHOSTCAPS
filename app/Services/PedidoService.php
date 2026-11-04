@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Cliente;
 use App\Repositories\PedidoRepository;
+use App\Mail\PedidoNuevoMail;
+use Illuminate\Support\Facades\Mail;
 
 class PedidoService
 {
@@ -51,5 +53,21 @@ class PedidoService
     public function actualizarEstado(int $id, string $estado)
     {
         return $this->pedidorepository->actualizarEstado($id, $estado);
+    }
+
+    public function notificarNuevoPedido(int $idPedido): void
+    {
+        $correo = config('tienda.correo_admin');
+
+        if (!$correo) {
+            return;
+        }
+
+        try {
+            $pedido = $this->buscarConDetalle($idPedido);
+            Mail::to($correo)->send(new PedidoNuevoMail($pedido));
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 }

@@ -7,6 +7,7 @@ use App\Services\PedidoService;
 use App\Services\CarritoService;
 use App\Services\ClienteService;
 use App\Services\DetallePedidoService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
@@ -43,47 +44,59 @@ class CheckoutController extends Controller
 
     public function store(CheckoutStoreRequest $request)
     {
-        $cliente = $this->clienteservice->buscarPorDocumento($request->validated('numero_documento'));
+        $detalle = $this->carritoservice->obtenerDetallado();
 
-        if ($cliente) {
-            $cliente = $this->clienteservice->update($cliente->id, $request->validated());
-        } else {
-            $cliente = $this->clienteservice->store($request->validated());
+        if (empty($detalle['items'])) {
+            return redirect()->route('carrito.index');
         }
 
-        $detalle = $this->carritoservice->obtenerDetallado();
         $subtotal = $detalle['total'];
         $costoEnvio = config('tienda.costo_envio');
         $total = $subtotal + $costoEnvio;
 
-        $mensajeWhatsapp = $this->pedidoservice->mensajeWhatsApp(
-            $cliente,
-            $detalle['items'],
-            $subtotal,
-            $costoEnvio,
-            $total
-        );
+        $pedido = DB::transaction(function () use ($request, $detalle, $subtotal, $costoEnvio, $total) {
 
-        $pedido = $this->pedidoservice->store([
-            'estado_pedido' => 'Pendiente',
-            'mensaje_whatsapp' => $mensajeWhatsapp,
-            'costo_envio' => $costoEnvio,
-            'total' => $total,
-            'subtotal' => $subtotal,
-            'id_cliente' => $cliente->id,
-        ]);
+            $cliente = $this->clienteservice->buscarPorDocumento($request->validated('numero_documento'));
 
-        foreach ($detalle['items'] as $item) {
-            $this->detallepedidoservice->store([
-                'id_pedido' => $pedido->id,
-                'id_producto' => $item['producto']->id,
-                'cantidad' => $item['cantidad'],
-                'precio_unitario' => $item['producto']->precio,
-                'subtotal_detalle' => $item['subtotal'],
+            if ($cliente) {
+                $cliente = $this->clienteservice->update($cliente->id, $request->validated());
+            } else {
+                $cliente = $this->clienteservice->store($request->validated());
+            }
+
+            $mensajeWhatsapp = $this->pedidoservice->mensajeWhatsApp(
+                $cliente,
+                $detalle['items'],
+                $subtotal,
+                $costoEnvio,
+                $total
+            );
+
+            $pedido = $this->pedidoservice->store([
+                'estado_pedido' => 'Pendiente',
+                'mensaje_whatsapp' => $mensajeWhatsapp,
+                'costo_envio' => $costoEnvio,
+                'total' => $total,
+                'subtotal' => $subtotal,
+                'id_cliente' => $cliente->id,
             ]);
-        }
+
+            foreach ($detalle['items'] as $item) {
+                $this->detallepedidoservice->store([
+                    'id_pedido' => $pedido->id,
+                    'id_producto' => $item['producto']->id,
+                    'cantidad' => $item['cantidad'],
+                    'precio_unitario' => $item['producto']->precio,
+                    'subtotal_detalle' => $item['subtotal'],
+                ]);
+            }
+
+            return $pedido;
+        });
 
         $this->carritoservice->vaciar();
+
+        $this->pedidoservice->notificarNuevoPedido($pedido->id);
 
         session(['pedido_confirmado' => $pedido->id]);
 

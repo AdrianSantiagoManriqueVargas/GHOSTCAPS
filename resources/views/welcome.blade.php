@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('scripts')
+    <script defer src="{{ asset('js/rack.js') }}"></script>
+@endpush
+
 @section('titulo')
     Inicio | GhostCaps
 @endsection
@@ -51,54 +55,87 @@
         </div>
     </section>
 
-    {{-- CATEGORÍAS DESTACADAS --}}
-    <section class="max-w-[1500px] mx-auto px-4 sm:px-8 py-10">
+    {{-- RACK DE NUEVOS PRODUCTOS --}}
+    @if ($destacados->isNotEmpty())
+    <section
+        x-data="rack({{ $destacados->count() }})"
+        data-reveal
+        class="max-w-[1500px] mx-auto px-4 sm:px-8 py-10"
+    >
 
-        <h2 class="text-xl text-black mb-4 font-marker">Explora por categoría</h2>
+        <h2 class="text-xl text-black mb-4 font-marker">Nuevos productos</h2>
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            @foreach ($categoriasInicio as $categoria)
-                <a
-                    href="{{ route('catalogo.index', ['categorias' => [$categoria['id']]]) }}"
-                    class="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100"
+        {{-- Ventana: muestra siempre un número entero de tarjetas (1, 3 o 5) --}}
+        <div
+            class="relative touch-pan-y select-none [container-type:inline-size] [--w:100cqw] sm:[--w:calc(100cqw/3)] lg:[--w:calc(100cqw/5)]"
+            :class="arrastrando ? 'cursor-grabbing' : 'cursor-grab'"
+            @pointerdown="empezar($event)"
+            @pointermove.window="mover($event)"
+            @pointerup.window="soltar()"
+            @pointercancel.window="soltar()"
+            @dragstart.prevent
+        >
+
+            {{-- Barra de la que cuelgan --}}
+            <div class="absolute inset-x-0 top-0 z-10 h-2 rounded-full bg-gradient-to-b from-gray-300 to-gray-500 shadow"></div>
+
+            <div class="overflow-hidden pt-2 pb-4">
+                <div
+                    class="flex w-full ease-[cubic-bezier(0.22,1,0.36,1)] duration-500 motion-reduce:transition-none"
+                    :class="arrastrando ? '' : 'transition-transform'"
+                    :style="`transform: translateX(calc(50% - var(--w) * ${activo} - var(--w) / 2 + ${desplazamiento}px))`"
                 >
+                    @foreach ($destacados as $producto)
+                        <div class="flex w-[var(--w)] shrink-0 justify-center px-2">
 
-                    @if ($categoria['imagen'])
-                        <img
-                            src="{{ $categoria['imagen'] }}"
-                            alt="{{ $categoria['nombre'] }}"
-                            class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                        >
-                    @else
-                        <p class="flex h-full items-center justify-center text-gray-400">Sin imagen</p>
-                    @endif
+                            {{-- Si no es el activo, el clic lo centra; si es el activo, abre el producto. Si hubo arrastre, no hace nada --}}
+                            <a
+                                href="{{ route('catalogo.producto', $producto->id) }}"
+                                draggable="false"
+                                @click="if (movido) { $event.preventDefault(); return; } if (activo !== {{ $loop->index }}) { $event.preventDefault(); ir({{ $loop->index }}); }"
+                                class="block w-full origin-top transition duration-500"
+                                :class="activo === {{ $loop->index }} ? 'scale-100 opacity-100 balanceo' : 'scale-90 opacity-50 hover:opacity-80'"
+                                aria-label="{{ $producto->nombre_producto }}"
+                            >
+                                {{-- Hilo del que cuelga --}}
+                                <span class="mx-auto block h-8 w-px bg-gray-400"></span>
 
-                    <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 pt-16 text-white sm:p-5 sm:pt-20">
+                                <span class="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100">
+                                    @if ($producto->imagen_producto->isNotEmpty())
+                                        <img
+                                            src="{{ asset('storage/' . $producto->imagen_producto->first()->url_imagen) }}"
+                                            alt="{{ $producto->nombre_producto }}"
+                                            draggable="false"
+                                            class="absolute inset-0 h-full w-full object-cover"
+                                        >
+                                    @else
+                                        <span class="flex h-full items-center justify-center text-gray-400">Sin imagen</span>
+                                    @endif
+                                </span>
+                            </a>
 
-                        <p class="font-marker text-lg leading-tight tracking-wide sm:text-2xl">
-                            {{ $categoria['nombre'] }}
-                        </p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
 
-                        @if ($categoria['descripcion'])
-                            <p class="mt-1 hidden line-clamp-2 text-sm text-gray-200 sm:block">
-                                {{ $categoria['descripcion'] }}
-                            </p>
-                        @endif
+        </div>
 
-                        <p class="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest sm:mt-3 sm:text-xs">
-                            Ver colección
-                            <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
-                        </p>
-
-                    </div>
-                </a>
-            @endforeach
+        {{-- Flechas debajo, centradas --}}
+        <div class="mt-2 flex justify-center gap-3">
+            <button type="button" @click="ir(activo - 1)" :disabled="activo === 0" aria-label="Anterior"
+                class="h-12 w-12 rounded-xl border border-gray-300 text-2xl leading-none text-gray-600 transition hover:border-black hover:text-black disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-gray-300 disabled:hover:text-gray-600">‹</button>
+            <button type="button" @click="ir(activo + 1)" :disabled="activo === total - 1" aria-label="Siguiente"
+                class="h-12 w-12 rounded-xl border border-gray-300 text-2xl leading-none text-gray-600 transition hover:border-black hover:text-black disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-gray-300 disabled:hover:text-gray-600">›</button>
         </div>
 
     </section>
+    @endif    
+
+    {{-- CATEGORÍAS DESTACADAS --}}
 
     <section class="max-w-[1500px] mx-auto px-4 sm:px-8 py-10">
-        <div class="relative min-h-[420px] w-full overflow-hidden rounded-2xl shadow-md sm:min-h-0">
+        <div class="relative min-h-[420px] w-full overflow-hidden rounded-2xl shadow-md sm:min-h-0" data-reveal>
 
             @if (File::exists(public_path('img/banners/LOONEY-PC.webp')))
                 <img src="{{ asset('img/banners/LOONEY-PC.webp') }}" alt="Colección destacada GhostCaps" class="absolute inset-0 h-full w-full object-cover object-center sm:static sm:h-auto">
@@ -123,9 +160,10 @@
     </section>
 
     {{-- BLOQUE EDITORIAL: COLECCIÓN ESPECIAL --}}
+
     {{-- COLECCIONES --}}
     <section class="max-w-[1500px] mx-auto px-4 sm:px-8 py-10">
-        <div class="grid grid-cols-2 lg:grid-cols-4 overflow-hidden rounded-2xl">
+        <div class="grid grid-cols-2 lg:grid-cols-4 overflow-hidden rounded-2xl" data-reveal>
 
             <a href="{{ route('catalogo.index', ['categorias' => [1]]) }}" class="group relative block aspect-[4/5] overflow-hidden bg-neutral-900">
                 <img src="{{ asset('img/banners/MULTIMARCAS.webp') }}" alt="Multimarcas" class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105">
@@ -180,7 +218,7 @@
 
     {{-- PROPUESTA DE VALOR --}}
     <section class="bg-black text-white">
-        <div class="grid grid-cols-1 md:grid-cols-2 items-center">
+        <div class="grid grid-cols-1 md:grid-cols-2 items-center" data-reveal>
 
             <div class="px-8 py-16 sm:px-16 lg:px-24 text-center md:text-left">
                 <p class="text-base uppercase tracking-[0.3em] text-gray-400">Propuesta de valor</p>
@@ -198,7 +236,7 @@
                 </p>
             </div>
 
-            <div class="flex justify-center md:justify-end px-8 pb-12 sm:px-16 md:pb-0 lg:px-24">
+            <div class="flex justify-center md:justify-end px-8 pb-12 sm:px-16 md:pb-0 lg:px-24" data-reveal style="--delay: 200ms">
                 @if (File::exists(public_path('img/logo.png')))
                     <img src="{{ asset('img/logo.png') }}" alt="Modelo con gorra GhostCaps" class="w-64 sm:w-80 lg:w-96 h-auto">
                 @else

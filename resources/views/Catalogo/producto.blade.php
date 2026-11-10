@@ -10,32 +10,87 @@
 
     <div class="md:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-3xl">
-            @if ($imagenActual)
-            <div class="relative aspect-square overflow-hidden">
-                <img
-                    src="{{ asset('storage/' . $imagenActual->url_imagen) }}"
-                    alt="{{ $producto->nombre_producto }}"
-                    class="w-full h-full object-cover"
+
+            @if ($producto->imagen_producto->isNotEmpty())
+                <div
+                    x-data="{
+                        actual: 0,
+                        total: {{ $producto->imagen_producto->count() }},
+                        inicioX: 0,
+                        ir(i) { this.actual = Math.max(0, Math.min(this.total - 1, i)); }
+                    }"
+                    @keydown.left.window="ir(actual - 1)"
+                    @keydown.right.window="ir(actual + 1)"
                 >
 
-                @if ($tieneAnterior)
-                    <a href="{{ route('catalogo.producto', $producto->id) }}?img={{ $indiceActual - 1 }}"
-                       onclick="location.replace(this.href); return false;"
-                       class="absolute left-2 top-1/2 -translate-y-1/2 text-3xl">‹</a>
-                @endif
+                    {{-- Imagen principal --}}
+                    <div
+                        class="relative aspect-square overflow-hidden rounded-2xl bg-gray-100"
+                        @touchstart="inicioX = $event.touches[0].clientX"
+                        @touchend="let d = $event.changedTouches[0].clientX - inicioX; if (Math.abs(d) > 40) ir(actual + (d < 0 ? 1 : -1))"
+                    >
 
-                @if ($tieneSiguiente)
-                    <a href="{{ route('catalogo.producto', $producto->id) }}?img={{ $indiceActual + 1 }}"
-                       onclick="location.replace(this.href); return false;"
-                       class="absolute right-2 top-1/2 -translate-y-1/2 text-3xl">›</a>
-                @endif
-            </div>
+                        {{-- Pista que se desliza --}}
+                        <div
+                            class="absolute inset-0 flex ease-[cubic-bezier(0.22,1,0.36,1)] transition-transform duration-700 motion-reduce:transition-none"
+                            :style="`transform: translateX(-${actual * 100}%)`"
+                        >
+                            @foreach ($producto->imagen_producto as $imagen)
+                                <div class="h-full w-full shrink-0 overflow-hidden">
+                                    <img
+                                        src="{{ asset('storage/' . $imagen->url_imagen) }}"
+                                        alt="{{ $producto->nombre_producto }}"
+                                        class="h-full w-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transition-none"
+                                        :class="actual === {{ $loop->index }} ? 'scale-100' : 'scale-125'"
+                                    >
+                                </div>
+                            @endforeach
+                        </div>
+
+                        @if ($producto->imagen_producto->count() > 1)
+
+                            {{-- Flechas --}}
+                            <button type="button" @click="ir(actual - 1)" aria-label="Foto anterior"
+                                class="absolute left-3 top-1/2 z-10 h-10 w-10 -translate-y-1/2 rounded-xl bg-white/80 text-2xl leading-none text-black transition hover:bg-white"
+                                :class="actual === 0 ? 'pointer-events-none opacity-0' : ''">‹</button>
+
+                            <button type="button" @click="ir(actual + 1)" aria-label="Foto siguiente"
+                                class="absolute right-3 top-1/2 z-10 h-10 w-10 -translate-y-1/2 rounded-xl bg-white/80 text-2xl leading-none text-black transition hover:bg-white"
+                                :class="actual === total - 1 ? 'pointer-events-none opacity-0' : ''">›</button>
+
+                            {{-- Contador --}}
+                            <span class="absolute bottom-3 right-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white"
+                                  x-text="`${actual + 1} / ${total}`"></span>
+
+                        @endif
+
+                    </div>
+
+                    {{-- Miniaturas --}}
+                    @if ($producto->imagen_producto->count() > 1)
+                        <div class="mt-3 flex gap-2 overflow-x-auto">
+                            @foreach ($producto->imagen_producto as $imagen)
+                                <button
+                                    type="button"
+                                    @click="ir({{ $loop->index }})"
+                                    class="h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 transition"
+                                    :class="actual === {{ $loop->index }} ? 'border-black' : 'border-transparent opacity-60 hover:opacity-100'"
+                                    aria-label="Ver foto {{ $loop->iteration }}"
+                                >
+                                    <img src="{{ asset('storage/' . $imagen->url_imagen) }}" alt="" class="h-full w-full object-cover">
+                                </button>
+                            @endforeach
+                        </div>
+                    @endif
+
+                </div>
             @else
-                <p class="w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">Sin imagen</p>
+                <p class="w-full aspect-square bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">Sin imagen</p>
             @endif
+
         </div>
     </div>
-
+    
     <div class="md:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md flex flex-col gap-4">
 

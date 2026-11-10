@@ -9,6 +9,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Permanent+Marker&display=swap" rel="stylesheet">
 
+    {{-- Animaciones propias --}}
+    <link rel="stylesheet" href="{{ asset('css/animaciones.css') }}">
+
+    {{-- Marca que JavaScript está activo (para la aparición al bajar) --}}
+    <script>document.documentElement.classList.add('js')</script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -22,6 +28,12 @@
             },
         };
     </script>
+
+    {{-- Scripts propios de cada página (deben ir antes de Alpine) --}}
+    @stack('scripts')
+
+    <script defer src="{{ asset('js/animaciones.js') }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </head>
 <body class="bg-white flex flex-col min-h-screen">
 
@@ -40,9 +52,6 @@
 
                 <a href="{{ route('inicio') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('inicio') ? 'text-red-500' : 'text-white' }}">
                     INICIO
-                </a>
-                <a href="{{ route('nosotros') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('nosotros') ? 'text-red-500' : 'text-white' }}">
-                    NOSOTROS
                 </a>
                 <a href="{{ route('catalogo.index') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('catalogo.index') ? 'text-red-500' : 'text-white' }}">
                     CATALOGO

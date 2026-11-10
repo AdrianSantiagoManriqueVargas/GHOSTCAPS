@@ -19,11 +19,15 @@
                 >
 
                 @if ($tieneAnterior)
-                    <a href="{{ route('catalogo.producto', $producto->id) }}?img={{ $indiceActual - 1 }}" class="absolute left-2 top-1/2 -translate-y-1/2 text-3xl">‹</a>
+                    <a href="{{ route('catalogo.producto', $producto->id) }}?img={{ $indiceActual - 1 }}"
+                       onclick="location.replace(this.href); return false;"
+                       class="absolute left-2 top-1/2 -translate-y-1/2 text-3xl">‹</a>
                 @endif
 
                 @if ($tieneSiguiente)
-                    <a href="{{ route('catalogo.producto', $producto->id) }}?img={{ $indiceActual + 1 }}" class="absolute right-2 top-1/2 -translate-y-1/2 text-3xl">›</a>
+                    <a href="{{ route('catalogo.producto', $producto->id) }}?img={{ $indiceActual + 1 }}"
+                       onclick="location.replace(this.href); return false;"
+                       class="absolute right-2 top-1/2 -translate-y-1/2 text-3xl">›</a>
                 @endif
             </div>
             @else

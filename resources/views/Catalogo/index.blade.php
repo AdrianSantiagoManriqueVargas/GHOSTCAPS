@@ -157,28 +157,59 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2">
         @foreach ($productos as $producto)
-            <a href="{{ route('catalogo.producto', $producto->id) }}" class="group block">
+            <div id="producto-{{ $producto->id }}" class="group scroll-mt-40">
 
-                <div class="aspect-square overflow-hidden bg-gray-100">
+                {{-- Imagen --}}
+                <a href="{{ route('catalogo.producto', $producto->id) }}" class="relative block aspect-square overflow-hidden bg-gray-100">
                     @if ($producto->imagen_producto->isNotEmpty())
                         <img
                             src="{{ asset('storage/' . $producto->imagen_producto->first()->url_imagen) }}"
                             alt="{{ $producto->nombre_producto }}"
-                            class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                            class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110"
                         >
                     @else
                         <p class="p-4 text-gray-400">Sin imagen</p>
                     @endif
+                </a>
+
+                {{-- Textos a la izquierda, botón del carrito a la derecha --}}
+                <div class="flex items-end justify-between gap-2 bg-white p-2">
+
+                    <a href="{{ route('catalogo.producto', $producto->id) }}" class="min-w-0 flex-1">
+                        <p class="text-md font-semibold text-black">${{ number_format($producto->precio, 0, ',', '.') }}</p>
+                        <p class="line-clamp-2 text-sm text-gray-600 transition-colors group-hover:text-black">{{ $producto->nombre_producto }}</p>
+                        <p class="text-sm text-gray-400">{{ $producto->categoria->nombre_categoria }}</p>
+                        @if ($producto->stock <= 0)
+                            <p class="mt-1 text-xs font-bold uppercase tracking-widest text-red-600">Agotado</p>
+                        @endif
+                    </a>
+
+                    @if ($producto->stock > 0)
+                        <form action="{{ route('carrito.store', $producto->id) }}" method="POST" class="shrink-0">
+                            @csrf
+                            <button type="submit" title="Agregar al carrito" aria-label="Agregar al carrito"
+                                class="p-1 text-gray-500 transition hover:scale-110 hover:text-black">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.2a1 1 0 0 0 1-.8L19 8H6.2"/>
+                                    <circle cx="9.5" cy="19" r="1.4"/>
+                                    <circle cx="16.5" cy="19" r="1.4"/>
+                                </svg>
+                            </button>
+                        </form>
+                    @else
+                        <button type="button" disabled title="Agotado" aria-label="Agotado"
+                            class="shrink-0 cursor-not-allowed p-1 text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.2a1 1 0 0 0 1-.8L19 8H6.2"/>
+                                <circle cx="9.5" cy="19" r="1.4"/>
+                                <circle cx="16.5" cy="19" r="1.4"/>
+                            </svg>
+                        </button>
+                    @endif
+
                 </div>
 
-                <div class="bg-white p-2">
-                    <p class="text-md font-semibold text-black">${{ number_format($producto->precio, 0, ',', '.') }}</p>
-                    <p class="text-sm text-gray-600 transition-colors group-hover:text-black">{{ $producto->nombre_producto }}</p>
-                    <p class="text-sm text-gray-400">{{ $producto->categoria->nombre_categoria }}</p>
-                </div>
-
-            </a>
-
+            </div>
         @endforeach
     </div>
     

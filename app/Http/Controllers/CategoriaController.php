@@ -52,7 +52,18 @@ class CategoriaController extends Controller
 
     public function destroy(int $id)
     {
+        $categoria = $this->categoriaservice->edit($id);
+        $totalProductos = $categoria->producto()->count();
+
+        // verificar si tiene gorras
+
+        if ($totalProductos > 0) {
+            return redirect()->route('categoria.index')->with(
+                'error', 
+                "No puedes eliminar la categoría \"{$categoria->nombre_categoria}\" porque tiene {$totalProductos} gorra(s) asignada(s). Primero debes reasignar o eliminar esos productos."
+            );
+        }
         $this->categoriaservice->destroy($id);
-        return redirect()->route('categoria.index');
+        return redirect()->route('categoria.index')->with('success', 'Categoría eliminada correctamente.');
     }
 }

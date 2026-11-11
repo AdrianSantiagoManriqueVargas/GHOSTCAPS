@@ -23,23 +23,30 @@ class PedidoService
 
     public function mensajeWhatsapp(Cliente $cliente, array $items, float $subtotal, float $costoEnvio, float $total): string
     {
-        $mensaje = "Hola, quiero confirmar mi pedido:\n\n";
+        $mensaje = "*NUEVO PEDIDO - GHOSTCAPS*\n\n";
+        $mensaje .= "*Productos solicitados:*\n";
 
         foreach ($items as $item) {
-            $mensaje .= "- {$item['cantidad']}x {$item['producto']->nombre_producto} ($" . number_format($item['subtotal'], 0, ',', '.') . ")\n";
+            $producto = $item['producto'];
+            $urlProducto = route('catalogo.producto', $producto->id);
+
+            $mensaje .= "- {$item['cantidad']}x *{$producto->nombre_producto}* ($" . number_format($item['subtotal'], 0, ',', '.') . ")\n";
+            $mensaje .= "  Ver producto: {$urlProducto}\n\n";
         }
 
-        $mensaje .= "\nSubtotal: $" . number_format($subtotal, 0, ',', '.') . "\n";
+        $mensaje .= "*Resumen de pago:*\n";
+        $mensaje .= "Subtotal: $" . number_format($subtotal, 0, ',', '.') . "\n";
         $mensaje .= "Envio: $" . number_format($costoEnvio, 0, ',', '.') . "\n";
-        $mensaje .= "Total: $" . number_format($total, 0, ',', '.') . "\n\n";
-        $mensaje .= "Datos del cliente:\n";
-        $mensaje .= "Nombre: {$cliente->nombre_cliente}\n";
-        $mensaje .= "Telefono: {$cliente->telefono_cliente}\n";
-        $mensaje .= "Direccion: {$cliente->direccion}, {$cliente->ciudad}\n";
+        $mensaje .= "*Total a pagar: $" . number_format($total, 0, ',', '.') . "*\n\n";
+
+        $mensaje .= "*Datos de Envio:*\n";
+        $mensaje .= "- Cliente: {$cliente->nombre_cliente}\n";
+        $mensaje .= "- Telefono: {$cliente->telefono_cliente}\n";
+        $mensaje .= "- Destino: {$cliente->direccion}, {$cliente->ciudad}\n";
 
         return $mensaje;
     }
-
+        
     public function buscarConDetalle(int $id)
     {
         return $this->pedidorepository->buscarConDetalle($id);

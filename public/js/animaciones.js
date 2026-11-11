@@ -19,3 +19,24 @@
 
     elementos.forEach((el) => observador.observe(el));
 })();
+
+// Reproduce el video de "Más Vendidas" la primera vez que entra en pantalla
+(function () {
+    const video = document.getElementById('video-mas-vendidas');
+    if (!video) return;
+    if (!('IntersectionObserver' in window)) {
+        video.play();
+        return;
+    }
+    let reproducido = false;
+    const observador = new IntersectionObserver((entradas) => {
+        entradas.forEach((entrada) => {
+            if (entrada.isIntersecting && !reproducido) {
+                reproducido = true;
+                video.play();
+                observador.disconnect();
+            }
+        });
+    }, { threshold: 0.4 });
+    observador.observe(video);
+})();

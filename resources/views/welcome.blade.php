@@ -2,6 +2,7 @@
 
 @push('scripts')
     <script defer src="{{ asset('js/rack.js') }}"></script>
+    <script defer src="{{ asset('js/animaciones.js') }}"></script>
 @endpush
 
 @section('titulo')
@@ -85,7 +86,7 @@
                     :class="arrastrando ? '' : 'transition-transform'"
                     :style="`transform: translateX(calc(50% - var(--w) * ${activo} - var(--w) / 2 + ${desplazamiento}px))`"
                 >
-                    @foreach ($destacados as $producto)
+                                        @foreach ($destacados as $producto)
                         <div class="flex w-[var(--w)] shrink-0 justify-center px-2">
 
                             {{-- Si no es el activo, el clic lo centra; si es el activo, abre el producto. Si hubo arrastre, no hace nada --}}
@@ -94,13 +95,18 @@
                                 draggable="false"
                                 @click="if (movido) { $event.preventDefault(); return; } if (activo !== {{ $loop->index }}) { $event.preventDefault(); ir({{ $loop->index }}); }"
                                 class="block w-full origin-top transition duration-500"
-                                :class="activo === {{ $loop->index }} ? 'scale-100 opacity-100 balanceo' : 'scale-90 opacity-50 hover:opacity-80'"
+                                :class="activo === {{ $loop->index }} ? 'scale-100 opacity-100 balanceo' : ('scale-90 opacity-50 hover:opacity-80 ' + ({{ $loop->index }} <= maxVisto ? 'balanceo' : ''))"
                                 aria-label="{{ $producto->nombre_producto }}"
                             >
-                                {{-- Hilo del que cuelga --}}
-                                <span class="mx-auto block h-8 w-px bg-gray-400"></span>
+                                {{-- Gancho y cuerda con grosor real para que no se vea flotando --}}
+                                <div class="relative mx-auto flex flex-col items-center">
+                                    {{-- Argolla/gancho que toca la barra --}}
+                                    <span class="-mt-1 h-2.5 w-2.5 rounded-full border-2 border-gray-600 bg-white shadow-sm"></span>
+                                    {{-- Cuerda con grosor visible --}}
+                                    <span class="block h-7 w-0.5 bg-gray-600"></span>
+                                </div>
 
-                                <span class="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100">
+                                <span class="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-transparent">
                                     @if ($producto->imagen_producto->isNotEmpty())
                                         <img
                                             src="{{ asset('storage/' . $producto->imagen_producto->first()->url_imagen) }}"
@@ -155,6 +161,111 @@
                     Ver colección
                 </a>
             </div>
+
+        </div>
+    </section>
+
+    {{-- BENTO GRID: ESTILO BUSINESS CAPS --}}
+    <section class="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 sm:gap-5 min-h-[580px] lg:h-[620px]" data-reveal>
+
+            {{-- 1. TARJETA GRANDE IZQUIERDA (MÁS VENDIDAS) --}}
+            <a href="{{ route('catalogo.index') }}" 
+            class="group relative overflow-hidden rounded-2xl md:col-span-2 lg:col-span-2 lg:row-span-2 min-h-[380px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg" onmouseenter="const v = this.querySelector('video'); if(v) v.play();" onmouseleave="const v = this.querySelector('video'); if(v) v.pause();">
+
+                <video
+                    id="video-mas-vendidas"
+                    src="{{ asset('img/banners/video.mp4')  }}"
+                    muted
+                    playsinline
+                    onended="this.pause();"
+                    class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                ></video>
+
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to black/10"></div>
+
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col items-start">
+                    <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-1">
+                        Nuevo
+                    </span>
+                    <h3 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+                        Más Vendidas
+                    </h3>
+                    <span class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-white text-black text-xs sm:text-sm font-bold uppercase tracking-wider shadow-md transition-all duration-300 group-hover:bg-neutral-200 group-hover:scale-105">
+                        Comprar
+                    </span>
+                </div>
+
+            </a>
+
+            {{-- 2. TARJETA SUPERIOR DERECHA (LO NUEVO) --}}
+            <a href="{{ route('catalogo.index') }}" 
+            class="group relative overflow-hidden rounded-2xl md:col-span-2 lg:col-span-2 min-h-[220px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg">
+                
+                <img src="{{ asset('img/banners/bannerbeta2.jpg') }}" 
+                    alt="Lo Nuevo" 
+                    class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10"></div>
+
+                <div class="absolute inset-x-0 bottom-0 p-6 flex flex-col items-start">
+                    <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-1">
+                        Nuevo
+                    </span>
+                    <h3 class="text-xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">
+                        Lo Nuevo
+                    </h3>
+                    <span class="inline-flex items-center justify-center px-5 py-2 rounded-full bg-white text-black text-xs font-bold uppercase tracking-wider shadow-md transition-all duration-300 group-hover:bg-neutral-200 group-hover:scale-105">
+                        Comprar
+                    </span>
+                </div>
+            </a>
+
+            {{-- 3. TARJETA INFERIOR IZQUIERDA (ÚLTIMAS UNIDADES) --}}
+            <a href="{{ route('catalogo.index') }}" 
+            class="group relative overflow-hidden rounded-2xl min-h-[220px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg">
+                
+                <img src="{{ asset('img/banners/MULTIMARCAS.webp') }}" 
+                    alt="Últimas Unidades" 
+                    class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10"></div>
+
+                <div class="absolute inset-x-0 bottom-0 p-5 flex flex-col items-start">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-1">
+                        Nuevo
+                    </span>
+                    <h3 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight mb-3">
+                        Últimas unidades
+                    </h3>
+                    <span class="inline-flex items-center justify-center px-5 py-2 rounded-full bg-white text-black text-xs font-bold uppercase tracking-wider shadow-md transition-all duration-300 group-hover:bg-neutral-200 group-hover:scale-105">
+                        Comprar
+                    </span>
+                </div>
+            </a>
+
+            {{-- 4. TARJETA INFERIOR DERECHA (TENDENCIAS) --}}
+            <a href="{{ route('catalogo.index') }}" 
+            class="group relative overflow-hidden rounded-2xl min-h-[220px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg">
+                
+                <img src="{{ asset('img/banners/ROCKINLIFE.webp') }}" 
+                    alt="Tendencias" 
+                    class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10"></div>
+
+                <div class="absolute inset-x-0 bottom-0 p-5 flex flex-col items-start">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-1">
+                        Destacado
+                    </span>
+                    <h3 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight mb-3">
+                        Tendencias
+                    </h3>
+                    <span class="inline-flex items-center justify-center px-5 py-2 rounded-full bg-white text-black text-xs font-bold uppercase tracking-wider shadow-md transition-all duration-300 group-hover:bg-neutral-200 group-hover:scale-105">
+                        Comprar
+                    </span>
+                </div>
+            </a>
 
         </div>
     </section>

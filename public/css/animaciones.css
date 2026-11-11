@@ -1,11 +1,11 @@
 /* ---------- Balanceo del rack ---------- */
 @keyframes balanceo {
-    0%, 100% { transform: rotate(-1.5deg); }
-    50%      { transform: rotate(1.5deg); }
+    0%, 100% { transform: rotate(-5deg); }
+    50%      { transform: rotate(5deg); }
 }
 
 .balanceo {
-    animation: balanceo 4s ease-in-out infinite;
+    animation: balanceo 2s ease-in-out infinite;
     transform-origin: top center;
 }
 
@@ -30,4 +30,25 @@ html.js [data-reveal].visible {
 @media (prefers-reduced-motion: reduce) {
     .balanceo { animation: none; }
     html.js [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Transición suave entre páginas ---------- */
+@keyframes entradaPagina {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main {
+    animation: entradaPagina 0.35s ease-out forwards;
+}
+
+/* API moderna de transición entre páginas de los navegadores */
+@view-transition {
+    navigation: auto;
 }

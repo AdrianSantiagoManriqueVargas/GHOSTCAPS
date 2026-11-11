@@ -55,11 +55,15 @@ class CheckoutController extends Controller
         $total = $subtotal + $costoEnvio;
 
         $pedido = DB::transaction(function () use ($request, $detalle, $subtotal, $costoEnvio, $total) {
-
-            $cliente = $this->clienteservice->buscarPorDocumento($request->validated('numero_documento'));
-
-            if ($cliente) {
-                $cliente = $this->clienteservice->update($cliente->id, $request->validated());
+            $clienteExistente = $this->clienteservice->buscarPorDocumento($request->validated('numero_documento'));
+            if ($clienteExistente) {
+                // SEGURIDAD: Si la cédula ya existe pero el correo no coincide, no permitimos sobreescribir datos ajenos
+                if (strtolower($clienteExistente->correo_cliente) !== strtolower($request->validated('correo_cliente'))) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'numero_documento' => 'Este número de documento ya está registrado con otro correo electrónico. Por favor verifica tus datos.'
+                    ]);
+                }
+                $cliente = $this->clienteservice->update($clienteExistente->id, $request->validated());
             } else {
                 $cliente = $this->clienteservice->store($request->validated());
             }
@@ -105,7 +109,8 @@ class CheckoutController extends Controller
 
     public function resumen()
     {
-        $idPedido = session('pedido_confirmado');
+        // pull() obtiene el ID y lo borra de la sesión para que nadie más pueda reabrir los datos
+        $idPedido = session()->pull('pedido_confirmado');
 
         if (!$idPedido) {
             return redirect()->route('inicio');

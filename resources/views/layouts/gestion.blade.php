@@ -137,6 +137,21 @@
                 @endif
             </a>
 
+            {{-- Seguridad / Cambiar Contraseña --}}
+            <a href="{{ route('perfil.password') }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+               {{ request()->routeIs('perfil.password') 
+                    ? 'bg-white/10 text-white shadow-sm' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0 {{ request()->routeIs('perfil.password') ? 'text-red-500' : '' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                <span class="flex-1">Seguridad</span>
+                @if (request()->routeIs('perfil.password'))
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 shadow-sm"></span>
+                @endif
+            </a>
+
         </nav>
 
         {{-- Tarjeta "Tu marca, en la calle." --}}

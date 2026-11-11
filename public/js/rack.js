@@ -3,6 +3,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('rack', (total) => ({
         activo: 0,
         total: total,
+        maxVisto: 0,
         arrastrando: false,
         movido: false,
         inicioX: 0,
@@ -10,6 +11,9 @@ document.addEventListener('alpine:init', () => {
 
         ir(i) {
             this.activo = Math.max(0, Math.min(this.total - 1, i));
+            if (this.activo > this.maxVisto) {
+                this.maxVisto = this.activo;
+            }
         },
 
         empezar(e) {

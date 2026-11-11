@@ -56,6 +56,9 @@
                 <a href="{{ route('catalogo.index') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('catalogo.index') ? 'text-red-500' : 'text-white' }}">
                     CATALOGO
                 </a>
+                <a href="{{ route('politicas') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->routeIs('politicas') ? 'text-red-500' : 'text-white' }}">
+                    ENVÍOS
+                </a>
                 @auth
                     <a href="{{ route('gestion.index') }}" class="py-3 text-center text-sm font-bold tracking-wider transition-colors hover:text-red-400 sm:py-0 sm:text-lg {{ request()->is('gestion*') ? 'text-red-500' : 'text-white' }}">
                         GESTIÓN
@@ -63,7 +66,7 @@
                 @endauth
 
             </div>
-
+            
             {{-- Usuario + carrito + botón de las 3 rayitas --}}
             <div class="col-start-3 flex items-center gap-4 justify-self-end">
 
@@ -99,30 +102,40 @@
 
     <main class="flex-1">
 
-        @if (session('success'))
-            <div class="bg-green-500 text-white p-4 mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
-
         @yield('contenido')
+        
     </main>
 
     <footer class="bg-black text-white px-10 pb-8">
-        <div class="max-w-7xl mx-auto border-t border-white/20 pt-10 flex flex-col sm:flex-row justify-between items-center sm:items-start gap-8 text-center sm:text-left">
+        <div class="max-w-7xl mx-auto border-t border-white/20 pt-10 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
 
+            {{-- COLUMNA 1: CONTACTO --}}
             <div>
                 <h3 class="font-marker text-xl text-red-500 tracking-wide">Contacto</h3>
-                <div class="mt-3 space-y-1 text-gray-300">
+                <div class="mt-3 space-y-1.5 text-sm text-gray-300">
                     <p>ghostcaps@gmail.com</p>
                     <p>+57 3172126545</p>
                     <p>+57 3112323435</p>
                 </div>
             </div>
 
+            {{-- COLUMNA 2: AYUDA Y POLÍTICAS --}}
+            <div>
+                <h3 class="font-marker text-xl text-red-500 tracking-wide">Ayuda y Soporte</h3>
+                <div class="mt-3 flex flex-col gap-2 text-sm text-gray-300">
+                    <a href="{{ route('politicas') }}" class="transition-colors hover:text-red-500">
+                        Envíos y Devoluciones
+                    </a>
+                    <a href="{{ route('catalogo.index') }}" class="transition-colors hover:text-red-500">
+                        Ver Catálogo
+                    </a>
+                </div>
+            </div>
+
+            {{-- COLUMNA 3: SÍGUENOS --}}
             <div>
                 <h3 class="font-marker text-xl text-red-500 tracking-wide">Síguenos</h3>
-                <div class="mt-3 flex flex-col gap-1 text-gray-300">
+                <div class="mt-3 flex flex-col gap-2 text-sm text-gray-300">
                     <a href="#" class="transition-colors hover:text-red-500">Instagram</a>
                     <a href="#" class="transition-colors hover:text-red-500">TikTok</a>
                     <a href="https://wa.me/573172126545" target="_blank" rel="noopener" class="transition-colors hover:text-red-500">WhatsApp</a>
@@ -135,6 +148,25 @@
             © {{ date('Y') }} GhostCaps. Todos los derechos reservados.
         </p>
     </footer>
+
+        {{-- BOTÓN VOLVER ARRIBA --}}
+    <div 
+        x-data="{ visible: false }" 
+        @scroll.window="visible = (window.pageYOffset > 450)"
+        class="fixed bottom-6 right-6 z-40 transition-all duration-300"
+        :class="visible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'"
+    >
+        <button 
+            type="button"
+            @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            aria-label="Volver arriba"
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-2xl border border-white/20 transition-all duration-300 hover:bg-red-600 hover:scale-110 active:scale-95"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+        </button>
+    </div>
 
 </body>
 </html>

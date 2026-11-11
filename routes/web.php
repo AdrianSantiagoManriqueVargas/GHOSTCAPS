@@ -52,6 +52,10 @@ Route::get('/', function () {
 // RUTAS PARA LA GESTION DE PRODUCTOS
 
 Route::middleware('auth')->prefix('gestion')->group(function () {
+
+    // CAMBIO DE CONTRASEÑA SEGURO
+    Route::get('perfil/password', [\App\Http\Controllers\AuthController::class, 'mostrarCambiarPassword'])->name('perfil.password');
+    Route::put('perfil/password', [\App\Http\Controllers\AuthController::class, 'cambiarPassword'])->name('perfil.password.update');
     
     Route::get('/', function () {
         return view('gestion.index', [
@@ -84,6 +88,7 @@ Route::middleware('auth')->prefix('gestion')->group(function () {
 
 // RUTAS PUBLICAS
 
+Route::view('politicas', 'politicas')->name('politicas');
 Route::get('catalogo', [CatalogoController::class, 'index'])->name('catalogo.index');
 Route::get('catalogo/producto/{id}', [CatalogoController::class, 'show'])->name('catalogo.producto');
 
@@ -96,9 +101,10 @@ Route::put('carrito/actualizar/{producto}', [CarritoController::class, 'update']
 Route::post('carrito/comprar/{producto}', [CarritoController::class, 'comprarAhora'])->name('carrito.comprarAhora');
 
 // CHECKOUT
-
 Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout.create');
-Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+Route::post('checkout', [CheckoutController::class, 'store'])->middleware('throttle:5,1')->name('checkout.store');
+
 Route::get('checkout/resumen', [CheckoutController::class, 'resumen'])->name('checkout.resumen');
 
 // AUTH

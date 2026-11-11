@@ -155,6 +155,59 @@
 
             </div>
 
+            {{-- BLOQUE DE CONFIANZA CON COLOR --}}
+            <div class="mt-4 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 space-y-3 shadow-xs">
+                
+                {{-- 1. Caja Rígida (Ámbar) --}}
+                <div class="flex items-start gap-3.5 p-2 rounded-xl transition-colors hover:bg-amber-50/50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/20 shadow-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <p class="font-bold text-gray-900 text-sm">Empaque en Caja Rígida</p>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-full">Protegido</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-0.5">Tu gorra viaja protegida contra aplastamientos en corona y visera.</p>
+                    </div>
+                </div>
+
+                {{-- 2. Envíos Nacionales (Azul) --}}
+                <div class="flex items-start gap-3.5 p-2 rounded-xl transition-colors hover:bg-blue-50/50 border-t border-gray-100 pt-3">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/20 shadow-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                        </svg>
+                    </span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <p class="font-bold text-gray-900 text-sm">Envíos a toda Colombia</p>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full">Nacional</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-0.5">Entrega en 2 a 4 días hábiles con guía de rastreo en tiempo real.</p>
+                    </div>
+                </div>
+
+                {{-- 3. Garantía GhostCaps (Rojo de la marca) --}}
+                <div class="flex items-start gap-3.5 p-2 rounded-xl transition-colors hover:bg-red-50/50 border-t border-gray-100 pt-3">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-red-600 border border-red-500/20 shadow-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <p class="font-bold text-gray-900 text-sm">Garantía GhostCaps</p>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-red-700 bg-red-100/80 px-2 py-0.5 rounded-full">30 Días</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-0.5">15 días para cambios y 30 días de respaldo por defectos de fábrica.</p>
+                    </div>
+                </div>
+
+            </div>
+            
         </div>
     </div>
 

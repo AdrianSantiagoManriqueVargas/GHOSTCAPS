@@ -34,8 +34,7 @@ class CarritoController extends Controller
         $this->carritoservice->agregar($producto);
 
         return back()
-            ->with('success', 'Producto agregado al carrito.')
-            ->withFragment('producto-' . $producto);
+            ->with('producto_agregado', $producto);
     }
 
     public function update(CarritoUpdateRequest $request, int $producto)

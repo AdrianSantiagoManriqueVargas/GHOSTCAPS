@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use Illuminate\Validation\ValidationException;
 
 class CarritoService{
 
@@ -11,15 +12,30 @@ class CarritoService{
         $this->productoservice = $productoservice;
     }
 
-    public function agregar(int $idProducto){
+    public function agregar(int $idProducto): void
+    {
         $carrito = session('carrito', []);
 
-        // Si el producto ya está en el carrito, le suma 1 a su cantidad
-        if (isset($carrito[$idProducto])) {
-            $carrito[$idProducto]++;
-        } else {
-            $carrito[$idProducto] = 1; // Si no esta, lo agrega con cantidad 1
+        // Cuántas unidades de este producto ya hay en el carrito y cuántas existen realmente
+        $cantidadEnCarrito = $carrito[$idProducto] ?? 0;
+        $stock = $this->productoservice->stockActual($idProducto);
+
+        // Producto agotado: no se puede agregar
+        if ($stock <= 0) {
+            throw ValidationException::withMessages([
+                'carrito' => 'Este producto está agotado por el momento.'
+            ]);
         }
+
+        // Ya hay en el carrito todas las unidades disponibles: no se puede sumar otra
+        if ($cantidadEnCarrito + 1 > $stock) {
+            throw ValidationException::withMessages([
+                'carrito' => "Ya tienes en tu carrito todas las unidades disponibles ({$stock})."
+            ]);
+        }
+
+        // Si el producto ya está en el carrito suma 1; si no, lo agrega con cantidad 1
+        $carrito[$idProducto] = $cantidadEnCarrito + 1;
 
         session(['carrito' => $carrito]);
     }
@@ -34,13 +50,28 @@ class CarritoService{
         session(['carrito' => $carrito]);
     }
 
-    public function actualizar(int $idProducto, int $cantidad){
+    public function actualizar(int $idProducto, int $cantidad): void
+    {
         $carrito = session('carrito', []);
-        if(isset($carrito[$idProducto])){
-            $carrito[$idProducto] = $cantidad;
+
+        // Si el producto no está en el carrito, no hay nada que actualizar
+        if (!isset($carrito[$idProducto])) {
+            return;
         }
+
+        // No se permite pedir más unidades de las que hay
+        $stock = $this->productoservice->stockActual($idProducto);
+
+        if ($cantidad > $stock) {
+            throw ValidationException::withMessages([
+                'carrito' => "Solo hay {$stock} unidades disponibles de este producto."
+            ]);
+        }
+
+        $carrito[$idProducto] = $cantidad;
+
         session(['carrito' => $carrito]);
-    }   
+    }  
 
     public function vaciar(){
         session()->forget('carrito');

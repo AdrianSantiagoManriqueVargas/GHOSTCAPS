@@ -102,6 +102,12 @@
 
     <main class="flex-1">
 
+        @if ($errors->has('carrito'))
+            <div class="bg-red-500 text-white p-4 mb-4">
+                {{ $errors->first('carrito') }}
+            </div>
+        @endif
+
         @yield('contenido')
         
     </main>

@@ -97,7 +97,11 @@
             <h2 class="text-4xl font-bold">{{ $producto->nombre_producto }}</h2>
             <p class="text-2xl font-semibold">Precio: ${{ number_format($producto->precio, 0, ',', '.') }}</p>
             <p class="text-gray-600 leading-relaxed">{{ $producto->descripcion_producto }}</p>
-            <p class="text-sm text-gray-500">{{ $producto->stock }} unidades disponibles</p>
+            @if ($producto->stock > 0)
+                <p class="text-sm text-gray-500">{{ $producto->stock }} unidades disponibles</p>
+            @else
+                <p class="text-sm font-semibold text-red-600">Agotado</p>
+            @endif
             <p class="text-sm text-gray-500">Categoría: {{ $producto->categoria->nombre_categoria }}</p>
 
             {{-- Variantes de color --}}
@@ -135,26 +139,44 @@
                 </div>
 
             </div>
+            
             {{-- Botones comprar ahora o agregar al carrito --}}
-
             <div class="mt-4 flex flex-col gap-3">
-                
-                <form action="{{ route('carrito.comprarAhora', $producto->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full bg-black text-white py-4 rounded font-bold text-lg hover:bg-gray-800 transition-colors">
+
+                @if ($producto->stock > 0)
+
+                    <form action="{{ route('carrito.comprarAhora', $producto->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full bg-black text-white py-4 rounded font-bold text-lg hover:bg-gray-800 transition-colors">
+                            Comprar ahora
+                        </button>
+                    </form>
+
+                    <form action="{{ route('carrito.store', $producto->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full border border-black text-black py-3 rounded font-semibold hover:bg-gray-100 transition-colors">
+                            Agregar al carrito
+                        </button>
+                    </form>
+
+                @else
+
+                    <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        Este producto está agotado por el momento.
+                    </div>
+
+                    <button type="button" disabled class="w-full cursor-not-allowed rounded bg-gray-200 py-4 text-lg font-bold text-gray-400">
                         Comprar ahora
                     </button>
-                </form>
 
-                <form action="{{ route('carrito.store', $producto->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full border border-black text-black py-3 rounded font-semibold hover:bg-gray-100 transition-colors">
+                    <button type="button" disabled class="w-full cursor-not-allowed rounded border border-gray-200 py-3 font-semibold text-gray-400">
                         Agregar al carrito
                     </button>
-                </form>
+
+                @endif
 
             </div>
-
+            
             {{-- BLOQUE DE CONFIANZA CON COLOR --}}
             <div class="mt-4 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 space-y-3 shadow-xs">
                 

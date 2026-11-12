@@ -116,4 +116,24 @@ class ProductoRepository{
 
         return $relacionados;
     }
+
+    // Descuenta stock solo si todavía alcanza. Devuelve true si desconto, false si no había suficiente
+    public function descontarStock(int $id, int $cantidad): bool
+    {
+        return Producto::where('id', $id)
+            ->where('stock', '>=', $cantidad)
+            ->decrement('stock', $cantidad) > 0;
+    }
+
+    // Suma unidades de vuelta al stock
+    public function devolverStock(int $id, int $cantidad): void
+    {
+        Producto::where('id', $id)->increment('stock', $cantidad);
+    }
+
+    // Stock actual de un producto (0 si ya no existe)
+    public function stockActual(int $id): int
+    {
+        return (int) Producto::where('id', $id)->value('stock');
+    }
 }

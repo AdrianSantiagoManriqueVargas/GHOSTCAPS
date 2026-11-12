@@ -154,6 +154,10 @@
                     @endforeach
                 </select>
 
+                @error('estado_pedido')
+                    <p class="text-sm text-red-600">{{ $message }}</p>
+                @enderror
+
                 <button type="submit" class="w-full rounded-xl bg-black hover:bg-gray-800 text-white text-sm font-medium py-2.5 transition-colors">
                     Actualizar estado
                 </button>

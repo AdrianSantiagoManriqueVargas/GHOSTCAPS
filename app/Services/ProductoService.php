@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Producto;
 use App\Repositories\ProductoRepository;
+use Illuminate\Validation\ValidationException;
 
 class ProductoService{
 
@@ -124,5 +125,46 @@ class ProductoService{
     public function productosRelacionados(Producto $producto)
     {
         return $this->productorepository->relacionados($producto);
+    }
+
+    // Stock actual de un producto
+    public function stockActual(int $idProducto): int
+    {
+        return $this->productorepository->stockActual($idProducto);
+    }
+
+    // Descuenta el stock de un producto. Devuelve false si no alcanzaba
+    public function descontarStock(int $idProducto, int $cantidad): bool
+    {
+        return $this->productorepository->descontarStock($idProducto, $cantidad);
+    }
+
+    // Devuelve unidades al stock (por ejemplo, al cancelar un pedido)
+    public function devolverStock(int $idProducto, int $cantidad): void
+    {
+        $this->productorepository->devolverStock($idProducto, $cantidad);
+    }
+
+    // Descuenta el stock de todo el carrito
+    // Si algún producto no alcanza, lanza un error, la transacción de quien lo llame
+    // deshace los descuentos que ya se habían hecho
+    public function descontarStockCarrito(array $items): void
+    {
+        $sinStock = [];
+
+        foreach ($items as $item) {
+            $producto = $item['producto'];
+
+            if (!$this->productorepository->descontarStock($producto->id, $item['cantidad'])) {
+                $stockActual = $this->productorepository->stockActual($producto->id);
+                $sinStock[] = "\"{$producto->nombre_producto}\" (disponible: {$stockActual}, solicitado: {$item['cantidad']})";
+            }
+        }
+
+        if (!empty($sinStock)) {
+            throw ValidationException::withMessages([
+                'stock' => 'No se pudo completar la compra. Estos productos no tienen stock suficiente: ' . implode(', ', $sinStock) . '. Ajusta tu carrito e intenta de nuevo.'
+            ]);
+        }
     }
 }

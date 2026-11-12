@@ -222,6 +222,7 @@
 
         {{-- CONTENIDO --}}
         <main class="flex-1 p-8">
+
             @if (session('mensaje'))
                 <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 mb-6 rounded-xl text-sm flex items-center justify-between">
                     <span>{{ session('mensaje') }}</span>

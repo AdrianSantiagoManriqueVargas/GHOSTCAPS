@@ -9,7 +9,7 @@
 {{-- NAVEGACIÓN Y ENCABEZADO --}}
 <div class="mb-8 max-w-2xl mx-auto">
     <a href="{{ route('categoria.index') }}" 
-       class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition-colors mb-3">
+       class="inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 hover:text-black transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>

@@ -112,7 +112,7 @@
             <p class="text-gray-500 py-16">Tu carrito está vacío.</p>
         @endforelse
 
-        <a href="{{ route('catalogo.index') }}" class="text-sm text-gray-500 hover:text-black underline">
+        <a href="{{ route('catalogo.index') }}" class="inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 hover:text-black transition-colors">
             Volver al catálogo
         </a>
 

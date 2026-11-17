@@ -48,12 +48,19 @@ class ProductoRepository{
     {
         $query = Producto::with(['categoria', 'imagen_producto']);
 
-        // Búsqueda por texto (nombre de la gorra o ID)
+        // Búsqueda inteligente por nombre, descripción, categoría o color
         if (!empty($filtros['buscar'])) {
-            $buscar = $filtros['buscar'];
+            $buscar = trim($filtros['buscar']);
             $query->where(function ($q) use ($buscar) {
                 $q->where('nombre_producto', 'like', "%{$buscar}%")
-                  ->orWhere('id', 'like', "%{$buscar}%");
+                  ->orWhere('descripcion_producto', 'like', "%{$buscar}%")
+                  ->orWhere('id', 'like', "%{$buscar}%")
+                  ->orWhereHas('categoria', function ($qc) use ($buscar) {
+                      $qc->where('nombre_categoria', 'like', "%{$buscar}%");
+                  })
+                  ->orWhereHas('color_producto', function ($qcol) use ($buscar) {
+                      $qcol->where('nombre_color', 'like', "%{$buscar}%");
+                  });
             });
         }
 

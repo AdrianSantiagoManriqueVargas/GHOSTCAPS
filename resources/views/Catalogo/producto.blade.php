@@ -107,11 +107,46 @@
             <h2 class="text-4xl font-bold">{{ $producto->nombre_producto }}</h2>
             <p class="text-2xl font-semibold">Precio: ${{ number_format($producto->precio, 0, ',', '.') }}</p>
             <p class="text-gray-600 leading-relaxed">{{ $producto->descripcion_producto }}</p>
+
+            {{-- ANTES:
             @if ($producto->stock > 0)
                 <p class="text-sm text-gray-500">{{ $producto->stock }} unidades disponibles</p>
             @else
                 <p class="text-sm font-semibold text-red-600">Agotado</p>
             @endif
+            --}}
+
+            {{-- AHORA: BLOQUE DE URGENCIA / FOMO --}}
+            <div class="my-1">
+                @if ($producto->stock <= 0)
+                    <div class="inline-flex items-center gap-2 rounded-xl bg-gray-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-gray-500">
+                        <span class="h-2 w-2 rounded-full bg-gray-400"></span>
+                        Agotado temporalmente
+                    </div>
+                @elseif ($producto->stock == 1)
+                    <div class="inline-flex items-center gap-2 rounded-xl bg-red-50 border border-red-200 px-3.5 py-2 text-xs font-bold text-red-700 shadow-xs">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
+                        </span>
+                        <span>¡Alta demanda! Solo queda <strong>1 unidad</strong> disponible en stock.</span>
+                    </div>
+                @elseif ($producto->stock <= 3)
+                    <div class="inline-flex items-center gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-2 text-xs font-bold text-amber-900 shadow-xs">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                        </span>
+                        <span>¡Pocas unidades! Solo quedan <strong>{{ $producto->stock }} disponibles</strong>.</span>
+                    </div>
+                @else
+                    <div class="inline-flex items-center gap-2 text-xs font-semibold text-gray-600">
+                        <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                        <span>{{ $producto->stock }} unidades disponibles — Envío inmediato</span>
+                    </div>
+                @endif
+            </div>
+            
             <p class="text-sm text-gray-500">Categoría: {{ $producto->categoria->nombre_categoria }}</p>
 
             {{-- Variantes de color --}}

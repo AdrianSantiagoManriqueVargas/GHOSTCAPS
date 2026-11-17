@@ -15,6 +15,7 @@ class CatalogoIndexRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'buscar'       => 'nullable|string|max:100',
             'precio_min'   => 'nullable|numeric|min:0',
             'precio_max'   => 'nullable|numeric|min:0',
             'colores'      => 'nullable|array',

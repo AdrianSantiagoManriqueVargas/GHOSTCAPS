@@ -11,34 +11,53 @@
     {{-- FILTROS --}}
     <input type="checkbox" id="panel-filtros" class="peer hidden">
 
-    {{-- Botón fijo debajo del navbar --}}
-    <div class="sticky top-16 sm:top-24 z-[5] mb-6 flex items-center gap-4 border-b border-gray-200 bg-white py-3">
+    {{-- Barra superior del catálogo: Filtros y Buscador --}}
+    <div class="sticky top-16 sm:top-24 z-[5] mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 bg-white py-3">
 
-        <label
-            for="panel-filtros"
-            class="inline-flex cursor-pointer items-center gap-3 rounded-full border border-black px-8 py-2.5 text-xs font-bold uppercase tracking-widest text-black transition hover:bg-black hover:text-white"
-        >
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-                <path d="M4 6h9.8M18.2 6H20"/>
-                <circle cx="16" cy="6" r="2.2"/>
-                <path d="M4 12h1.8M10.2 12H20"/>
-                <circle cx="8" cy="12" r="2.2"/>
-                <path d="M4 18h7.8M16.2 18H20"/>
-                <circle cx="14" cy="18" r="2.2"/>
-            </svg>
+        <div class="flex items-center gap-4">
+            <label
+                for="panel-filtros"
+                class="inline-flex cursor-pointer items-center gap-3 rounded-full border border-black px-8 py-2.5 text-xs font-bold uppercase tracking-widest text-black transition hover:bg-black hover:text-white"
+            >
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                    <path d="M4 6h9.8M18.2 6H20"/>
+                    <circle cx="16" cy="6" r="2.2"/>
+                    <path d="M4 12h1.8M10.2 12H20"/>
+                    <circle cx="8" cy="12" r="2.2"/>
+                    <path d="M4 18h7.8M16.2 18H20"/>
+                    <circle cx="14" cy="18" r="2.2"/>
+                </svg>
 
-            Filtros
+                Filtros
+
+                @if (!empty($filtros))
+                    <span class="h-2 w-2 rounded-full bg-red-600"></span>
+                @endif
+            </label>
 
             @if (!empty($filtros))
-                <span class="h-2 w-2 rounded-full bg-red-600"></span>
+                <a href="{{ route('catalogo.index') }}" class="text-xs font-bold uppercase tracking-widest text-gray-500 transition hover:text-red-600">
+                    Limpiar filtros
+                </a>
             @endif
-        </label>
+        </div>
 
-        @if (!empty($filtros))
-            <a href="{{ route('catalogo.index') }}" class="text-xs font-bold uppercase tracking-widest text-gray-500 transition hover:text-red-600">
-                Limpiar filtros
-            </a>
-        @endif
+        {{-- Buscador del Catálogo --}}
+        <form action="{{ route('catalogo.index') }}" method="GET" class="relative w-full sm:w-72">
+            @if (request('orden'))
+                <input type="hidden" name="orden" value="{{ request('orden') }}">
+            @endif
+            <input type="text" 
+                   name="buscar" 
+                   value="{{ request('buscar') }}" 
+                   placeholder="Buscar en el catálogo..." 
+                   class="w-full rounded-full border border-gray-300 bg-gray-50/50 px-4 py-2 pl-10 text-xs text-gray-800 focus:border-black focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 transition-all">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </span>
+        </form>
 
     </div>
 
@@ -182,6 +201,24 @@
                     @else
                         <p class="p-4 text-gray-400">Sin imagen</p>
                     @endif
+
+                    {{-- BADGES DE FOMO / STOCK SOBRE LA IMAGEN --}}
+                    <div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+                        @if ($producto->stock <= 0)
+                            <span class="rounded-md bg-black/85 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-xs">
+                                Agotado
+                            </span>
+                        @elseif ($producto->stock == 1)
+                            <span class="inline-flex items-center gap-1 rounded-md bg-red-600/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-xs backdrop-blur-xs animate-pulse">
+                                <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+                                ¡Última pieza!
+                            </span>
+                        @elseif ($producto->stock <= 3)
+                            <span class="inline-flex items-center gap-1 rounded-md bg-amber-500/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black shadow-xs backdrop-blur-xs">
+                                ⚡ Solo {{ $producto->stock }} disp.
+                            </span>
+                        @endif
+                    </div>
                 </a>
 
                 {{-- Textos a la izquierda, botón del carrito a la derecha --}}

@@ -170,7 +170,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 sm:gap-5 min-h-[580px] lg:h-[620px]" data-reveal>
 
             {{-- 1. TARJETA GRANDE IZQUIERDA (MÁS VENDIDAS) --}}
-            <a href="{{ route('catalogo.index') }}" 
+            <a href="{{ route('catalogo.index', ['orden' => 'mas_vendidas']) }}" 
             class="group relative overflow-hidden rounded-2xl md:col-span-2 lg:col-span-2 lg:row-span-2 min-h-[380px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg" onmouseenter="const v = this.querySelector('video'); if(v) v.play();" onmouseleave="const v = this.querySelector('video'); if(v) v.pause();">
 
                 <video
@@ -199,7 +199,7 @@
             </a>
 
             {{-- 2. TARJETA SUPERIOR DERECHA (LO NUEVO) --}}
-            <a href="{{ route('catalogo.index') }}" 
+            <a href="{{ route('catalogo.index', ['orden' => 'nuevo']) }}" 
             class="group relative overflow-hidden rounded-2xl md:col-span-2 lg:col-span-2 min-h-[220px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg">
                 
                 <img src="{{ asset('img/banners/bannerbeta2.jpg') }}" 
@@ -222,7 +222,7 @@
             </a>
 
             {{-- 3. TARJETA INFERIOR IZQUIERDA (ÚLTIMAS UNIDADES) --}}
-            <a href="{{ route('catalogo.index') }}" 
+            <a href="{{ route('catalogo.index', ['orden' => 'ultimas_unidades']) }}" 
             class="group relative overflow-hidden rounded-2xl min-h-[220px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg">
                 
                 <img src="{{ asset('img/banners/MULTIMARCAS.webp') }}" 
@@ -245,7 +245,7 @@
             </a>
 
             {{-- 4. TARJETA INFERIOR DERECHA (TENDENCIAS) --}}
-            <a href="{{ route('catalogo.index') }}" 
+            <a href="{{ route('catalogo.index', ['orden' => 'tendencias']) }}" 
             class="group relative overflow-hidden rounded-2xl min-h-[220px] lg:min-h-0 bg-neutral-900 border border-white/10 shadow-lg">
                 
                 <img src="{{ asset('img/banners/ROCKINLIFE.webp') }}" 

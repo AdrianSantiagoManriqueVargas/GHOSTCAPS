@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CatalogoIndexRequest;
 use App\Services\ProductoService;
 
 class CatalogoController extends Controller
@@ -14,18 +15,10 @@ class CatalogoController extends Controller
         $this->productoservice = $productoservice;
     }
 
-    public function index(Request $request)
+    public function index(CatalogoIndexRequest $request)
     {
-        $request->validate([
-            'precio_min'   => 'nullable|numeric|min:0',
-            'precio_max'   => 'nullable|numeric|min:0',
-            'colores'      => 'nullable|array',
-            'colores.*'    => 'string|max:50',
-            'categorias'   => 'nullable|array',
-            'categorias.*' => 'integer',
-        ]);
-
-        $filtros = array_filter($request->only(['precio_min', 'precio_max', 'colores', 'categorias']));
+        // validated() trae solo los campos que pasaron las reglas; array_filter quita los vacíos
+        $filtros = array_filter($request->validated());
 
         $productos = $this->productoservice->indexPaginado(16, $filtros);
         $colores = $this->productoservice->coloresDisponibles();
@@ -33,9 +26,11 @@ class CatalogoController extends Controller
 
         $coloresSeleccionados = array_map('strtolower', $filtros['colores'] ?? []);
         $categoriasSeleccionadas = array_map('intval', $filtros['categorias'] ?? []);
+        $tituloOrden = $this->productoservice->tituloOrden($filtros['orden'] ?? null);
 
         return view('Catalogo.index', compact(
-            'productos', 'filtros', 'colores', 'coloresSeleccionados', 'categorias', 'categoriasSeleccionadas'
+            'productos', 'filtros', 'colores', 'coloresSeleccionados',
+            'categorias', 'categoriasSeleccionadas', 'tituloOrden'
         ));
     }
 

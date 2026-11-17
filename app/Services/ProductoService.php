@@ -167,4 +167,15 @@ class ProductoService{
             ]);
         }
     }
+
+    // Título que se muestra en el catálogo según la tarjeta del inicio de la que se viene
+    public function tituloOrden(?string $orden): ?string
+    {
+        return [
+            'mas_vendidas'     => 'Más vendidas',
+            'nuevo'            => 'Lo nuevo',
+            'ultimas_unidades' => 'Últimas unidades',
+            'tendencias'       => 'Tendencias',
+        ][$orden] ?? null;
+    }
 }

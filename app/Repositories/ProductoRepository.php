@@ -70,7 +70,30 @@ class ProductoRepository{
             $query->whereIn('id_categoria', $filtros['categorias']);
         }
 
-        return $query->latest()->paginate($pagina)->withQueryString();
+        // Orden/criterio que viene de las tarjetas del inicio (si no viene, los más recientes)
+        switch ($filtros['orden'] ?? null) {
+            case 'mas_vendidas':
+                $this->ordenarPorVentas($query);
+                break;
+
+            case 'tendencias':
+                // Lo mismo, pero contando solo los pedidos de los últimos 30 días
+                $this->ordenarPorVentas($query, 30);
+                break;
+
+            case 'ultimas_unidades':
+                // Solo lo que todavía hay, pero queda poco; primero lo que está por agotarse
+                $query->where('stock', '>', 0)
+                      ->where('stock', '<=', 5)
+                      ->orderBy('stock')
+                      ->orderByDesc('id');
+                break;
+
+            default: // 'nuevo' o sin orden
+                $query->latest();
+        }
+
+        return $query->paginate($pagina)->withQueryString();
     }
 
     public function categoriasDisponibles()
@@ -135,5 +158,22 @@ class ProductoRepository{
     public function stockActual(int $id): int
     {
         return (int) Producto::where('id', $id)->value('stock');
+    }
+
+    // Ordena de mayor a menor por unidades vendidas. Los pedidos cancelados no cuentan.
+    // Si se pasa $dias, solo cuenta los pedidos de esos últimos días.
+    private function ordenarPorVentas($query, ?int $dias = null): void
+    {
+        $query->withSum(['detalle_pedido as unidades_vendidas' => function ($detalle) use ($dias) {
+            $detalle->whereHas('pedido', function ($pedido) use ($dias) {
+                $pedido->where('estado_pedido', '!=', 'Cancelado');
+
+                if ($dias) {
+                    $pedido->where('created_at', '>=', now()->subDays($dias));
+                }
+            });
+        }], 'cantidad')
+        ->orderByDesc('unidades_vendidas')
+        ->orderByDesc('id'); // desempate: si hay igual de ventas, el más nuevo primero
     }
 }

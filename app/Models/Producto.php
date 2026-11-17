@@ -33,7 +33,7 @@ class Producto extends Model
     }
 
     public function detalle_pedido(){
-        return $this->hasMany(DetallePedido::class);
+        return $this->hasMany(DetallePedido::class, 'id_producto');
     }
 
     public function color_producto(){

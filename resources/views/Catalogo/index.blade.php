@@ -55,6 +55,11 @@
 
         <form action="{{ route('catalogo.index') }}" method="GET">
 
+            {{-- Mantiene el criterio de la tarjeta (más vendidas, etc.) al aplicar filtros --}}
+            @if (request('orden'))
+                <input type="hidden" name="orden" value="{{ request('orden') }}">
+            @endif
+
             {{-- Precio --}}
             <div class="border-t border-gray-200 py-5">
                 <h3 class="text-sm font-bold uppercase tracking-widest text-black">Precio</h3>
@@ -152,6 +157,13 @@
         </form>
 
     </aside>
+
+    </aside>
+
+    {{-- Título del criterio elegido en el inicio (más vendidas, lo nuevo...) --}}
+    @if ($tituloOrden)
+        <h1 class="font-marker text-3xl mb-6">{{ $tituloOrden }}</h1>
+    @endif
 
     {{-- TARJETAS DE PRODUCTOS --}}
 

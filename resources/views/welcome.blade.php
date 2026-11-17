@@ -182,7 +182,7 @@
                     class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 ></video>
 
-                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to black/10"></div>
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10"></div>
 
                 <div class="pointer-events-none absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col items-start">
                     <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-1">

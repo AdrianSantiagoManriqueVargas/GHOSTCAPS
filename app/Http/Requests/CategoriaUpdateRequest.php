@@ -24,7 +24,8 @@ class CategoriaUpdateRequest extends FormRequest
     {
         return [
             'nombre_categoria' => 'required|string|max:255',
-            'descripcion_categoria' => 'nullable|string|max:455'
+            'descripcion_categoria' => 'nullable|string|max:455',
+            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
         ];
     }
 }

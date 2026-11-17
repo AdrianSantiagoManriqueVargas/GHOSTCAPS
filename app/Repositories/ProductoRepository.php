@@ -48,6 +48,35 @@ class ProductoRepository{
     {
         $query = Producto::with(['categoria', 'imagen_producto']);
 
+        // Búsqueda por texto (nombre de la gorra o ID)
+        if (!empty($filtros['buscar'])) {
+            $buscar = $filtros['buscar'];
+            $query->where(function ($q) use ($buscar) {
+                $q->where('nombre_producto', 'like', "%{$buscar}%")
+                  ->orWhere('id', 'like', "%{$buscar}%");
+            });
+        }
+
+        // Filtro por estado de stock
+        if (!empty($filtros['stock'])) {
+            switch ($filtros['stock']) {
+                case 'agotado':
+                    $query->where('stock', '<=', 0);
+                    break;
+                case 'bajo':
+                    $query->where('stock', '>', 0)->where('stock', '<=', 2);
+                    break;
+                case 'disponible':
+                    $query->where('stock', '>', 2);
+                    break;
+            }
+        }
+
+        // Filtro por categoría individual (panel de gestión)
+        if (!empty($filtros['id_categoria'])) {
+            $query->where('id_categoria', $filtros['id_categoria']);
+        }
+
         if (isset($filtros['precio_min'])) {
             $query->where('precio', '>=', $filtros['precio_min']);
         }
@@ -175,5 +204,15 @@ class ProductoRepository{
         }], 'cantidad')
         ->orderByDesc('unidades_vendidas')
         ->orderByDesc('id'); // desempate: si hay igual de ventas, el más nuevo primero
+    }
+
+    public function conteoPorStock(): array
+    {
+        return [
+            'todos'       => Producto::count(),
+            'disponibles' => Producto::where('stock', '>', 2)->count(),
+            'bajo'        => Producto::where('stock', '>', 0)->where('stock', '<=', 2)->count(),
+            'agotados'    => Producto::where('stock', '<=', 0)->count(),
+        ];
     }
 }

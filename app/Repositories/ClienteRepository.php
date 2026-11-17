@@ -39,8 +39,20 @@ class ClienteRepository
         return Cliente::where('numero_documento', $numeroDocumento)->first();
     }
 
-    public function indexPaginado(int $pagina = 10)
+    public function indexPaginado(int $pagina = 10, ?string $buscar = null)
     {
-        return Cliente::paginate($pagina);
+        $query = Cliente::query()->latest();
+
+        if ($buscar) {
+            $query->where(function ($q) use ($buscar) {
+                $q->where('nombre_cliente', 'like', "%{$buscar}%")
+                  ->orWhere('numero_documento', 'like', "%{$buscar}%")
+                  ->orWhere('telefono_cliente', 'like', "%{$buscar}%")
+                  ->orWhere('correo_cliente', 'like', "%{$buscar}%")
+                  ->orWhere('ciudad', 'like', "%{$buscar}%");
+            });
+        }
+
+        return $query->paginate($pagina)->withQueryString();
     }
 }

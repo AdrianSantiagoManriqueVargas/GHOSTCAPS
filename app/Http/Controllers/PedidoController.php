@@ -18,16 +18,18 @@ class PedidoController extends Controller
     public function index(Request $request)
     {
         $estado = $request->query('estado');
-        $pedidos = $this->pedidoservice->indexPaginado(10, $estado);
+        $buscar = $request->query('buscar');
+        $pedidos = $this->pedidoservice->indexPaginado(10, $estado, $buscar);
 
-        $conteo = [
-            'todos'      => Pedido::count(),
-            'Pendiente'  => Pedido::where('estado_pedido', 'Pendiente')->count(),
-            'Entregado'  => Pedido::where('estado_pedido', 'Entregado')->count(),
-            'Cancelado'  => Pedido::where('estado_pedido', 'Cancelado')->count(),
+        // Preparamos las pestañas directamente en el controlador
+        $tabs = [
+            ['etiqueta' => 'Todos',     'valor' => null,        'cantidad' => Pedido::count()],
+            ['etiqueta' => 'Pendiente', 'valor' => 'Pendiente', 'cantidad' => Pedido::where('estado_pedido', 'Pendiente')->count()],
+            ['etiqueta' => 'Entregado', 'valor' => 'Entregado', 'cantidad' => Pedido::where('estado_pedido', 'Entregado')->count()],
+            ['etiqueta' => 'Cancelado', 'valor' => 'Cancelado', 'cantidad' => Pedido::where('estado_pedido', 'Cancelado')->count()],
         ];
 
-        return view('Pedido.index', compact('pedidos', 'conteo', 'estado'));
+        return view('Pedido.index', compact('pedidos', 'tabs', 'estado', 'buscar'));
     }
 
     public function show(int $id)

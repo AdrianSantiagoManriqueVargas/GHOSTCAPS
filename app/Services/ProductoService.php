@@ -178,4 +178,16 @@ class ProductoService{
             'tendencias'       => 'Tendencias',
         ][$orden] ?? null;
     }
+
+    public function tabsStock(): array
+    {
+        $conteo = $this->productorepository->conteoPorStock();
+
+        return [
+            ['etiqueta' => 'Todos',       'valor' => null,         'cantidad' => $conteo['todos']],
+            ['etiqueta' => 'Disponibles', 'valor' => 'disponible', 'cantidad' => $conteo['disponibles']],
+            ['etiqueta' => 'Stock Bajo',  'valor' => 'bajo',       'cantidad' => $conteo['bajo']],
+            ['etiqueta' => 'Agotados',    'valor' => 'agotado',    'cantidad' => $conteo['agotados']],
+        ];
+    }
 }

@@ -29,8 +29,11 @@ class CategoriaController extends Controller
 
     public function store(CategoriaStoreRequest $request)
     {
-        $this->categoriaservice->store($request->validated());
-        return redirect()->route('categoria.index');
+        $this->categoriaservice->store(
+            $request->validated(),
+            $request->file('imagen_portada')
+        );
+        return redirect()->route('categoria.index')->with('success', 'Categoría creada con éxito.');
     }
 
     public function show()
@@ -46,8 +49,12 @@ class CategoriaController extends Controller
 
     public function update(int $id, CategoriaUpdateRequest $request)
     {
-        $this->categoriaservice->update($id, $request->validated());
-        return redirect()->route('categoria.index');
+        $this->categoriaservice->update(
+            $id,
+            $request->validated(),
+            $request->file('imagen_portada')
+        );
+        return redirect()->route('categoria.index')->with('success', 'Categoría actualizada con éxito.');
     }
 
     public function destroy(int $id)

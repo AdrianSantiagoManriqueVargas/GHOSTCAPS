@@ -6,10 +6,35 @@
 
 @section('contenido')
 
-{{-- ENCABEZADO (Solo informativo, sin botón de creación manual) --}}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Clientes</h1>
-    <p class="text-base text-gray-500 mt-1">Directorio de compradores registrados automáticamente a través de la tienda.</p>
+{{-- ENCABEZADO Y BARRA DE BÚSQUEDA --}}
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Clientes</h1>
+        <p class="text-base text-gray-500 mt-1">Directorio de compradores registrados en la tienda.</p>
+    </div>
+
+    {{-- Buscador rápido --}}
+    <form action="{{ route('cliente.index') }}" method="GET" class="flex items-center gap-2 w-full sm:w-80">
+        <div class="relative w-full">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </span>
+            <input type="text" 
+                   name="buscar" 
+                   value="{{ $buscar ?? '' }}" 
+                   placeholder="Buscar por nombre, cédula o tel..." 
+                   class="w-full pl-10 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black shadow-xs">
+        </div>
+        @if (!empty($buscar))
+            <a href="{{ route('cliente.index') }}" 
+               title="Limpiar búsqueda" 
+               class="px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                Limpiar
+            </a>
+        @endif
+    </form>
 </div>
 
 {{-- CONTENEDOR DE LA TABLA --}}

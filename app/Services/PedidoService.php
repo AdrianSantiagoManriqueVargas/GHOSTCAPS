@@ -58,9 +58,9 @@ class PedidoService
         return $this->pedidorepository->buscarConDetalle($id);
     }
 
-    public function indexPaginado(int $pagina = 10, ?string $estado = null)
+    public function indexPaginado(int $pagina = 10, ?string $estado = null, ?string $buscar = null)
     {
-        return $this->pedidorepository->indexPaginado($pagina, $estado);
+        return $this->pedidorepository->indexPaginado($pagina, $estado, $buscar);
     }
 
     public function actualizarEstado(int $id, string $nuevoEstado)

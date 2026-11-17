@@ -21,6 +21,64 @@
     </a>
 </div>
 
+{{-- PESTAÑAS DE STOCK Y FILTROS RÁPIDOS --}}
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
+
+    {{-- Tabs de Estado de Stock --}}
+    <div class="flex flex-wrap gap-2">
+        @foreach ($tabs as $tab)
+            <a href="{{ route('producto.index', array_filter(['stock' => $tab['valor'], 'categoria' => $filtros['id_categoria'], 'buscar' => $filtros['buscar']])) }}"
+               class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors
+                      {{ $filtros['stock'] === $tab['valor'] ? 'bg-black text-white border-black' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400' }}">
+                {{ $tab['etiqueta'] }}
+                <span class="text-xs {{ $filtros['stock'] === $tab['valor'] ? 'text-gray-300' : 'text-gray-400' }}">{{ $tab['cantidad'] }}</span>
+            </a>
+        @endforeach
+    </div>
+
+    {{-- Filtros: Selector de Categoría y Buscador --}}
+    <form action="{{ route('producto.index') }}" method="GET" class="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+        @if ($filtros['stock'])
+            <input type="hidden" name="stock" value="{{ $filtros['stock'] }}">
+        @endif
+
+        {{-- Dropdown de Categorías --}}
+        <select name="categoria" 
+                onchange="this.form.submit()"
+                class="px-3.5 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black shadow-xs text-gray-700">
+            <option value="">Todas las categorías</option>
+            @foreach ($categorias as $cat)
+                <option value="{{ $cat->id }}" @selected($filtros['id_categoria'] == $cat->id)>
+                    {{ $cat->nombre_categoria }}
+                </option>
+            @endforeach
+        </select>
+
+        {{-- Input de Búsqueda --}}
+        <div class="relative w-full sm:w-64">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </span>
+            <input type="text" 
+                   name="buscar" 
+                   value="{{ $filtros['buscar'] ?? '' }}" 
+                   placeholder="Buscar gorra o #ID..." 
+                   class="w-full pl-10 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black shadow-xs">
+        </div>
+
+        @if (!empty($filtros['buscar']) || !empty($filtros['id_categoria']))
+            <a href="{{ route('producto.index', array_filter(['stock' => $filtros['stock']])) }}" 
+               title="Limpiar filtros" 
+               class="px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors shrink-0">
+                Limpiar
+            </a>
+        @endif
+    </form>
+
+</div>
+
 {{-- CONTENEDOR DE LA TABLA --}}
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
 

@@ -19,10 +19,19 @@ class ProductoController extends Controller
         $this->categoriaservice = $categoriaservice;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $productos = $this->productoservice->indexPaginado(9);
-        return view('producto.index', compact('productos'));
+        $filtros = [
+            'buscar'       => $request->query('buscar'),
+            'stock'        => $request->query('stock'),
+            'id_categoria' => $request->query('categoria'),
+        ];
+
+        $productos  = $this->productoservice->indexPaginado(10, $filtros);
+        $categorias = $this->categoriaservice->index();
+        $tabs       = $this->productoservice->tabsStock();
+
+        return view('producto.index', compact('productos', 'tabs', 'categorias', 'filtros'));
     }
 
     public function create()

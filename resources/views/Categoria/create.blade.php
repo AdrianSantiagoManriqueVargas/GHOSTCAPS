@@ -39,7 +39,7 @@
 {{-- TARJETA DEL FORMULARIO --}}
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 max-w-2xl mx-auto">
 
-    <form action="{{ route('categoria.store') }}" method="POST" class="space-y-6">
+    <form action="{{ route('categoria.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
         {{-- Nombre --}}
@@ -63,6 +63,19 @@
                       placeholder="Breve detalle sobre este estilo o colección..."
                       class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all resize-y @error('descripcion_categoria') border-red-500 @enderror">{{ old('descripcion_categoria') }}</textarea>
             @error('descripcion_categoria')
+                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- Imagen de Portada --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Imagen de portada (opcional)</label>
+            <input type="file"
+                    name="imagen_portada"
+                    accept="image/*"
+                    class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-black file:text-white hover:file:bg-neutral-800 focus:outline-none transition-all @error('imagen_portada') border-red-500 @enderror">
+            <p class="text-[11px] text-gray-400 mt-1">Formato JPG, PNG o WEBP. Recomendado: orientación vertical o cuadrada.</p>
+            @error('imagen_portada')
                 <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
             @enderror
         </div>

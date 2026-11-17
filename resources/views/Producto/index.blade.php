@@ -104,7 +104,8 @@
                         <th class="py-4 px-7 text-xs font-semibold uppercase tracking-wider text-gray-400">Producto</th>
                         <th class="py-4 px-7 text-xs font-semibold uppercase tracking-wider text-gray-400">Colores</th>
                         <th class="py-4 px-7 text-xs font-semibold uppercase tracking-wider text-gray-400">Precio</th>
-                        <th class="py-4 px-7 text-xs font-semibold uppercase tracking-wider text-gray-400">Estado / Stock</th>
+                        <th class="py-4 px-7 text-xs font-semibold uppercase tracking-wider text-gray-400 text-center">Stock</th>
+                        <th class="py-4 px-7 text-xs font-semibold uppercase tracking-wider text-gray-400">Estado</th>
                         <th class="py-4 px-7 text-xs font-semibold uppercase tracking-wider text-gray-400 text-right">Acciones</th>
                     </tr>
                 </thead>
@@ -159,23 +160,35 @@
                             <td class="py-4.5 px-7 text-base font-medium text-gray-900">
                                 ${{ number_format($producto->precio, 0, ',', '.') }}
                             </td>
+                            
+                            {{-- Stock (Cantidad visible de alto contraste) --}}
+                            <td class="py-4.5 px-7 text-center">
+                                <div class="inline-flex items-baseline gap-1 px-3.5 py-1.5 rounded-xl border {{ $producto->stock <= 2 ? 'bg-red-50/80 border-red-200' : 'bg-gray-50 border-gray-200/80' }}">
+                                    <span class="text-lg font-black font-mono {{ $producto->stock === 0 ? 'text-red-600' : ($producto->stock <= 2 ? 'text-amber-600' : 'text-gray-900') }}">
+                                        {{ $producto->stock }}
+                                    </span>
+                                    <span class="text-[11px] font-bold uppercase tracking-wider {{ $producto->stock <= 2 ? 'text-red-500' : 'text-gray-400' }}">
+                                        uds
+                                    </span>
+                                </div>
+                            </td>
 
-                            {{-- Stock --}}
+                            {{-- Estado (Badge cualitativo) --}}
                             <td class="py-4.5 px-7">
                                 @if ($producto->stock === 0)
-                                    <span class="inline-flex items-center gap-1.5 bg-red-50 text-red-600 border border-red-200/50 text-sm font-medium px-3 py-1 rounded-full">
+                                    <span class="inline-flex items-center gap-1.5 bg-red-50 text-red-600 border border-red-200/50 text-xs font-semibold px-2.5 py-1 rounded-full">
                                         <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                                        Agotado (0)
+                                        Agotado
                                     </span>
                                 @elseif ($producto->stock <= 2)
-                                    <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 border border-amber-200/50 text-sm font-medium px-3 py-1 rounded-full">
+                                    <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 border border-amber-200/50 text-xs font-semibold px-2.5 py-1 rounded-full">
                                         <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                                        Bajo ({{ $producto->stock }})
+                                        Stock Bajo
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-sm font-medium px-3 py-1 rounded-full">
+                                    <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-xs font-semibold px-2.5 py-1 rounded-full">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                        {{ $producto->stock }} en stock
+                                        Disponible
                                     </span>
                                 @endif
                             </td>

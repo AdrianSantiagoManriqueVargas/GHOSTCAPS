@@ -15,20 +15,9 @@
     {{-- Marca que JavaScript está activo (para la aparición al bajar) --}}
     <script>document.documentElement.classList.add('js')</script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Montserrat', 'sans-serif'],
-                        marker: ['"Permanent Marker"', 'cursive'],
-                    },
-                },
-            },
-        };
-    </script>
-
+    {{-- Reemplaza el bloque de script del CDN de Tailwind por: --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     {{-- Scripts propios de cada página (deben ir antes de Alpine) --}}
     @stack('scripts')
 
@@ -121,7 +110,6 @@
                 <div class="mt-3 space-y-1.5 text-sm text-gray-300">
                     <p>ghostcaps@gmail.com</p>
                     <p>+57 3172126545</p>
-                    <p>+57 3112323435</p>
                 </div>
             </div>
 

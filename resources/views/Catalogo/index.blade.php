@@ -1,0 +1,284 @@
+@extends('layouts.app')
+
+@section('titulo')
+    Catalogo
+@endsection
+
+@section('contenido')
+
+<div class="max-w-8xl mx-auto pt-12 pb-12 px-24">
+
+    {{-- FILTROS --}}
+    <input type="checkbox" id="panel-filtros" class="peer hidden">
+
+    {{-- Barra superior del catálogo: Filtros y Buscador --}}
+    <div class="sticky top-16 sm:top-24 z-[5] mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 bg-white py-3">
+
+        <div class="flex items-center gap-4">
+            <label
+                for="panel-filtros"
+                class="inline-flex cursor-pointer items-center gap-3 rounded-full border border-black px-8 py-2.5 text-xs font-bold uppercase tracking-widest text-black transition hover:bg-black hover:text-white"
+            >
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                    <path d="M4 6h9.8M18.2 6H20"/>
+                    <circle cx="16" cy="6" r="2.2"/>
+                    <path d="M4 12h1.8M10.2 12H20"/>
+                    <circle cx="8" cy="12" r="2.2"/>
+                    <path d="M4 18h7.8M16.2 18H20"/>
+                    <circle cx="14" cy="18" r="2.2"/>
+                </svg>
+
+                Filtros
+
+                @if (!empty($filtros))
+                    <span class="h-2 w-2 rounded-full bg-red-600"></span>
+                @endif
+            </label>
+
+            @if (!empty($filtros))
+                <a href="{{ route('catalogo.index') }}" class="text-xs font-bold uppercase tracking-widest text-gray-500 transition hover:text-red-600">
+                    Limpiar filtros
+                </a>
+            @endif
+        </div>
+
+        {{-- Buscador del Catálogo --}}
+        <form action="{{ route('catalogo.index') }}" method="GET" class="relative w-full sm:w-72">
+            @if (request('orden'))
+                <input type="hidden" name="orden" value="{{ request('orden') }}">
+            @endif
+            <input type="text" 
+                   name="buscar" 
+                   value="{{ request('buscar') }}" 
+                   placeholder="Buscar en el catálogo..." 
+                   class="w-full rounded-full border border-gray-300 bg-gray-50/50 px-4 py-2 pl-10 text-xs text-gray-800 focus:border-black focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 transition-all">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </span>
+        </form>
+
+    </div>
+
+    {{-- Fondo oscuro: al hacer clic se cierra el panel --}}
+    <label for="panel-filtros" class="fixed inset-0 z-40 hidden cursor-pointer bg-black/50 peer-checked:block"></label>
+
+    {{-- Panel lateral --}}
+    <aside class="fixed inset-y-0 left-0 z-50 w-80 max-w-full -translate-x-full overflow-y-auto bg-white p-6 shadow-xl transition-transform duration-300 peer-checked:translate-x-0">
+
+        <div class="mb-6 flex items-center justify-between">
+            <h2 class="font-marker text-2xl tracking-wide text-black">Filtros</h2>
+            <label for="panel-filtros" class="cursor-pointer text-2xl leading-none text-gray-500 transition hover:text-red-600" aria-label="Cerrar filtros">✕</label>
+        </div>
+
+        <form action="{{ route('catalogo.index') }}" method="GET">
+
+            {{-- Mantiene el criterio de la tarjeta (más vendidas, etc.) al aplicar filtros --}}
+            @if (request('orden'))
+                <input type="hidden" name="orden" value="{{ request('orden') }}">
+            @endif
+
+            {{-- Precio --}}
+            <div class="border-t border-gray-200 py-5">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-black">Precio</h3>
+
+                <div class="mt-3 flex items-center gap-3">
+                    <input
+                        type="number"
+                        name="precio_min"
+                        min="0"
+                        value="{{ $filtros['precio_min'] ?? '' }}"
+                        placeholder="Mínimo"
+                        class="w-full border border-gray-300 px-3 py-2 text-sm"
+                    >
+                    <span class="text-gray-400">–</span>
+                    <input
+                        type="number"
+                        name="precio_max"
+                        min="0"
+                        value="{{ $filtros['precio_max'] ?? '' }}"
+                        placeholder="Máximo"
+                        class="w-full border border-gray-300 px-3 py-2 text-sm"
+                    >
+                </div>
+            </div>
+
+            {{-- Color --}}
+            @if ($colores->isNotEmpty())
+                <div class="border-t border-gray-200 py-5">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-black">Color</h3>
+
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        @foreach ($colores as $color)
+                            <label class="cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    name="colores[]"
+                                    value="{{ $color->nombre_color }}"
+                                    class="peer sr-only"
+                                    @checked(in_array(strtolower($color->nombre_color), $coloresSeleccionados))
+                                >
+
+                                <div class="flex items-center gap-2 rounded-full border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition peer-checked:border-black peer-checked:bg-black peer-checked:text-white">
+                                    <span
+                                        class="h-4 w-4 rounded-full border border-gray-300"
+                                        style="background-color: {{ $color->codigo_hex }}"
+                                    ></span>
+                                    {{ $color->nombre_color }}
+                                </div>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Categoría --}}
+            @if ($categorias->isNotEmpty())
+                <div class="border-t border-gray-200 py-5">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-black">Categoría</h3>
+
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        @foreach ($categorias as $categoria)
+                            <label class="cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    name="categorias[]"
+                                    value="{{ $categoria->id }}"
+                                    class="peer sr-only"
+                                    @checked(in_array($categoria->id, $categoriasSeleccionadas))
+                                >
+
+                                <div class="rounded-full border border-gray-300 px-3 py-1.5 text-sm text-gray-700 transition peer-checked:border-black peer-checked:bg-black peer-checked:text-white">
+                                    {{ $categoria->nombre_categoria }}
+                                </div>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Aquí irá Marca --}}
+
+            <button
+                type="submit"
+                class="mt-2 w-full border border-black bg-black py-3 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white hover:text-black"
+            >
+                Aplicar filtros
+            </button>
+
+            @if (!empty($filtros))
+                <a href="{{ route('catalogo.index') }}" class="mt-4 block text-center text-xs font-bold uppercase tracking-widest text-gray-500 transition hover:text-red-600">
+                    Limpiar filtros
+                </a>
+            @endif
+
+        </form>
+
+    </aside>
+
+    </aside>
+
+    {{-- Título del criterio elegido en el inicio (más vendidas, lo nuevo...) --}}
+    @if ($tituloOrden)
+        <h1 class="font-marker text-3xl mb-6">{{ $tituloOrden }}</h1>
+    @endif
+
+    {{-- TARJETAS DE PRODUCTOS --}}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2">
+        @foreach ($productos as $producto)
+            <div id="producto-{{ $producto->id }}" class="group scroll-mt-40">
+
+                {{-- Imagen --}}
+                <a href="{{ route('catalogo.producto', $producto->id) }}" class="relative block aspect-square overflow-hidden bg-gray-100">
+                    @if ($producto->imagen_producto->isNotEmpty())
+                        <img
+                            src="{{ asset('storage/' . $producto->imagen_producto->first()->url_imagen) }}"
+                            alt="{{ $producto->nombre_producto }}"
+                            class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                        >
+                    @else
+                        <p class="p-4 text-gray-400">Sin imagen</p>
+                    @endif
+
+                    {{-- BADGES DE FOMO / STOCK SOBRE LA IMAGEN --}}
+                    <div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+                        @if ($producto->stock <= 0)
+                            <span class="rounded-md bg-black/85 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-xs">
+                                Agotado
+                            </span>
+                        @elseif ($producto->stock == 1)
+                            <span class="inline-flex items-center gap-1 rounded-md bg-red-600/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-xs backdrop-blur-xs animate-pulse">
+                                <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+                                ¡Última pieza!
+                            </span>
+                        @elseif ($producto->stock <= 3)
+                            <span class="inline-flex items-center gap-1 rounded-md bg-amber-500/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black shadow-xs backdrop-blur-xs">
+                                ⚡ Solo {{ $producto->stock }} disp.
+                            </span>
+                        @endif
+                    </div>
+                </a>
+
+                {{-- Textos a la izquierda, botón del carrito a la derecha --}}
+                <div class="flex items-end justify-between gap-2 bg-white p-2">
+
+                    <a href="{{ route('catalogo.producto', $producto->id) }}" class="min-w-0 flex-1">
+                        <p class="text-md font-semibold text-black">${{ number_format($producto->precio, 0, ',', '.') }}</p>
+                        <p class="line-clamp-2 text-sm text-gray-600 transition-colors group-hover:text-black">{{ $producto->nombre_producto }}</p>
+                        <p class="text-sm text-gray-400">{{ $producto->categoria->nombre_categoria }}</p>
+                        @if ($producto->stock <= 0)
+                            <p class="mt-1 text-xs font-bold uppercase tracking-widest text-red-600">Agotado</p>
+                        @endif
+                    </a>
+
+                    @if ($producto->stock > 0)
+                        <form action="{{ route('carrito.store', $producto->id) }}" method="POST" class="shrink-0 flex items-center gap-1.5">
+                            @csrf
+
+                            {{-- Si esta fue la gorra recién agregada, muestra el texto y check verde --}}
+                            @if (session('producto_agregado') == $producto->id)
+                                <span x-data="{ show: true }" 
+                                      x-show="show" 
+                                      x-init="setTimeout(() => show = false, 3500)"
+                                      x-transition.opacity.duration.500ms
+                                      class="inline-flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-200 shadow-sm animate-pulse">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    ¡Agregado!
+                                </span>
+                            @endif
+
+                            <button type="submit" title="Agregar al carrito" aria-label="Agregar al carrito"
+                                class="p-1.5 rounded-full transition-all duration-200 {{ session('producto_agregado') == $producto->id ? 'text-green-600 bg-green-100 scale-110' : 'text-gray-500 hover:scale-110 hover:text-black hover:bg-gray-100' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.2a1 1 0 0 0 1-.8L19 8H6.2"/>
+                                    <circle cx="9.5" cy="19" r="1.4"/>
+                                    <circle cx="16.5" cy="19" r="1.4"/>
+                                </svg>
+                            </button>
+                        </form>
+                    @else
+                        <button type="button" disabled title="Agotado" aria-label="Agotado"
+                            class="shrink-0 cursor-not-allowed p-1 text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.2a1 1 0 0 0 1-.8L19 8H6.2"/>
+                                <circle cx="9.5" cy="19" r="1.4"/>
+                                <circle cx="16.5" cy="19" r="1.4"/>
+                            </svg>
+                        </button>
+                    @endif
+
+                </div>
+
+            </div>
+        @endforeach
+    </div>
+    
+    <div class="mt-8">
+        {{ $productos->links() }}
+    </div>
+</div>
+@endsection

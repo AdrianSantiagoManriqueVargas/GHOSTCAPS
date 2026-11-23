@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ProductoStoreRequest;
+use App\Http\Requests\ProductoUpdateRequest;
+use App\Services\ProductoService;
+use App\Services\CategoriaService;
+use Illuminate\Http\Request;
+
+class ProductoController extends Controller
+{
+
+    private ProductoService $productoservice;
+    private CategoriaService $categoriaservice;
+
+    public function __construct(ProductoService $productoservice, CategoriaService $categoriaservice){
+        $this->productoservice = $productoservice;
+        $this->categoriaservice = $categoriaservice;
+    }
+
+    public function index(Request $request)
+    {
+        $filtros = [
+            'buscar'       => $request->query('buscar'),
+            'stock'        => $request->query('stock'),
+            'id_categoria' => $request->query('categoria'),
+        ];
+
+        $productos  = $this->productoservice->indexPaginado(10, $filtros);
+        $categorias = $this->categoriaservice->index();
+        $tabs       = $this->productoservice->tabsStock();
+
+        return view('producto.index', compact('productos', 'tabs', 'categorias', 'filtros'));
+    }
+
+    public function create()
+    {
+        $categorias = $this->categoriaservice->index();
+        return view('producto.create', compact('categorias'));
+    }
+
+    public function store(ProductoStoreRequest $request)
+    {
+        $this->productoservice->store(
+            $request->safe()->except(['imagenes', 'colores']),
+            $request->file('imagenes'),
+            $request->input('colores', [])
+        );
+
+        return redirect()->route('producto.index');
+    }
+
+    public function show(int $id)
+    {
+        $producto = $this->productoservice->edit($id);
+        return view('producto.producto', compact('producto'));
+    }
+
+    public function edit(int $id)
+    {
+        $producto = $this->productoservice->edit($id);
+        $categorias = $this->categoriaservice->index();
+
+        return view('producto.edit', compact('producto', 'categorias'));
+    }
+
+    public function update(int $id, ProductoUpdateRequest $request)
+    {
+        $this->productoservice->update(
+            $id,
+            $request->safe()->except(['imagenes', 'colores']),
+            $request->file('imagenes'),
+            $request->input('colores')
+        );
+
+        return redirect()->route('producto.index');
+    }
+
+    public function destroy(int $id)
+    {   
+        $this->productoservice->destroy($id);
+        return redirect()->route('producto.index');
+    }
+}

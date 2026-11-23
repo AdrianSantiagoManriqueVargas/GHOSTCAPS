@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+
+class CategoriaUpdateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'nombre_categoria' => 'required|string|max:255',
+            'descripcion_categoria' => 'nullable|string|max:455',
+            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
+        ];
+    }
+}
